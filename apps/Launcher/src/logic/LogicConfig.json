@@ -1,0 +1,363 @@
+{
+  "layersID": [
+    "L10","L11","L12","L13","L14","L15","L16","L17","L18","L19",
+    "L20","L21","L22","L23","L24","L25","L26","L27","L28","L29",
+    "L30","L31","L32","L33","L34","L35","L36","L37","L38","L39",
+    "L40","L41","L42","L43","L44","L45","L46","L47","L48","L49",
+    "L50","L51","L52","L53","L54","L55","L56","L57","L58","L59",
+    "L60","L61","L62","L63","L64","L65","L66","L67","L68","L69",
+    "L70","L71","L72","L73","L74","L75","L76","L77","L78","L79",
+    "L80","L81","L82","L83","L84","L85","L86","L87","L88","L89",
+    "L90","L91","L92","L93","L94","L95","L96","L97","L98","L99"
+  ],
+  "imageRegistry": {
+    "SUN": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/-A4_d1qakkWz8EcpcI8xdw/SUN.png",
+    "STARBGHOLE": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/t20nEu85JE6LalepCRD9vw/BGSTARHOLE1.png",
+    "STARBGPURE": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/2WLIgK5uXUy0U5NNplABfw/BGSTAR.png",
+    "BG2": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/ARvX_gUYLkSkSIG_gzVbZw/BG2.png",
+    "BG3": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/4SWnpLA1cUKAHq3upktMbw/BG3.png",
+    "BG4": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/bYje8PnH_kihoVay60757A/BG4.png",
+    "BG5": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/BWs183Ug2EmiMOU3Gzc4Eg/BG5.png",
+    "BG6": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/fx3IbE-bj0WnLBC8L7l5lA/BG6.png",
+    "BG7": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/AcxW45MJQUe-iDjpFzi-Rg/BG7.png",
+    "BG8": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/aPZxEbAPEUOH6VSqgdG5Cw/BG8.png",
+    "BG9": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/B1Y3UYo-Fkmn7za7EHZD_g/BG9.png",
+    "CLOCKBG": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/W-I8lHq1l0qmAyOtikF8NQ/CLOCK-BG.png"
+  },
+
+  "layers": [
+    {
+      "id": "L10",
+      "imageRef": { "kind": "urlId", "id": "STARBGPURE" },
+      "position": { "xPct": 40, "yPct": 50 },
+      "scale": { "pct": 110 },
+      "angleDeg": 0,
+      "spinRPM": 0,
+      "spinDir": "cw",
+      "orbitRPM": 0,
+      "orbitDir": "cw",
+      "orbitCenter": { "xPct": 50, "yPct": 50 },
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": "none",
+      "orbitOrientDeg": 0,
+      "clock": {
+        "enabled": false,
+        "hand": "second",
+        "handSpin": "second",
+        "handOrbit": "second",
+        "format": 12,
+        "overrideSpin": false,
+        "overrideOrbit": false,
+        "tipDeg": 90,
+        "smooth": true,
+        "source": { "mode": "device", "tzOffsetMinutes": null }
+      }
+    },
+
+    {
+      "id": "L11",
+      "imageRef": { "kind": "urlId", "id": "BG2" },
+      "position": { "xPct": 65, "yPct": 40.5 },
+      "scale": { "pct": 50 },
+      "angleDeg": 0,
+      "spinRPM": 2,
+      "spinDir": "cw",
+      "orbitOrientPolicy": "auto",
+      "orbitOrientDeg": 0
+    },
+
+
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "BG2" },
+      "position": { "xPct": 43, "yPct": 52 },
+      "scale": { "pct": 35 },
+      "angleDeg": 0,
+      "spinRPM": 2,
+      "spinDir": "cw",
+      "orbitOrientPolicy": "auto",
+      "orbitOrientDeg": 0
+    },
+    {
+      "id": "L14",
+      "imageRef": { "kind": "urlId", "id": "BG3" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 43 },
+      "angleDeg": 11,
+      "spinRPM": 1,
+      "spinDir": "cw",
+      "orbitRPM": 0,
+      "orbitDir": "ccw",
+      "orbitCenter": { "xPct": 50, "yPct": 50 },
+      "orbitOrientPolicy": "auto",
+      "orbitOrientDeg": 0
+
+    },
+    {
+      "id": "L16",
+      "imageRef": { "kind": "urlId", "id": "BG4" },
+      "position": { "xPct": 71, "yPct": 55 },
+      "scale": { "pct": 65 },
+      "angleDeg": 0,
+      "spinRPM": 2.1,
+      "spinDir": "ccw",
+      "orbitRPM": 0,
+      "orbitDir": "cw",
+      "orbitCenter": { "xPct": 50, "yPct": 50 },
+      "orbitOrientPolicy": "auto",
+      "orbitOrientDeg": 0
+    },
+    {
+      "id": "L13",
+      "imageRef": { "kind": "urlId", "id": "BG4" },
+      "position": { "xPct": 31, "yPct": 64 },
+      "scale": { "pct": 120 },
+      "angleDeg": 0,
+      "spinRPM": 2.1,
+      "spinDir": "ccw",
+      "orbitRPM": 0,
+      "orbitDir": "cw",
+      "orbitCenter": { "xPct": 50, "yPct": 50 },
+      "orbitOrientPolicy": "auto",
+      "orbitOrientDeg": 0
+    },
+    {
+      "id": "L17",
+      "imageRef": { "kind": "urlId", "id": "BG2" },
+      "position": { "xPct": 55, "yPct": 38 },
+      "scale": { "pct": 15 },
+      "angleDeg": 0,
+      "spinRPM": 3,
+      "spinDir": "cw",
+      "orbitRPM": 0,
+      "orbitDir": "cw",
+      "orbitCenter": { "xPct": 50, "yPct": 50 },
+      "orbitOrientPolicy": "auto",
+      "orbitOrientDeg": 0
+    },
+    {
+      "id": "L19",
+      "imageRef": { "kind": "urlId", "id": "STARBGHOLE" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 110 },
+      "angleDeg": 0,
+      "spinRPM": 0,
+      "spinDir": "cw",
+      "orbitRPM": 0,
+      "orbitDir": "cw",
+      "orbitCenter": { "xPct": 50, "yPct": 50 },
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": "none",
+      "orbitOrientDeg": 0,
+      "clock": {
+        "enabled": false,
+        "hand": "second",
+        "handSpin": "second",
+        "handOrbit": "second",
+        "format": 12,
+        "overrideSpin": false,
+        "overrideOrbit": false,
+        "tipDeg": 90,
+        "smooth": true,
+        "source": { "mode": "device", "tzOffsetMinutes": null }
+      }
+    },
+    {
+      "id": "L21",
+      "imageRef": { "kind": "urlId", "id": "BG8" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 28 },
+      "angleDeg": 0,
+      "spinRPM": 0,
+      "spinDir": "cw",
+      "clock": {
+        "enabled": false,
+        "handSpin": "minute",
+        "handOrbit": "hour",
+        "format": 12,
+        "overrideSpin": true,
+        "overrideOrbit": true,
+        "tipDeg": 90,
+        "smooth": true,
+        "source": { "mode": "device" }
+      }
+    },
+    {
+      "id": "L25",
+      "imageRef": { "kind": "urlId", "id": "BG6" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 55 },
+      "angleDeg": 0,
+      "spinRPM": 0,
+      "spinDir": "cw"
+    },
+    {
+      "id": "L26",
+      "imageRef": { "kind": "urlId", "id": "BG7" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 55.5 },
+      "angleDeg": 0,
+      "spinRPM": 0,
+      "spinDir": "cw"
+    },
+    {
+      "id": "L27",
+      "imageRef": { "kind": "urlId", "id": "BG8" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 55 },
+      "angleDeg": 0,
+      "spinRPM": 5,
+      "spinDir": "cw",
+      "clock": {
+        "enabled": true,
+        "handSpin": "second",
+        "handOrbit": "hour",
+        "format": 12,
+        "overrideSpin": true,
+        "overrideOrbit": true,
+        "tipDeg": 90,
+        "smooth": true,
+        "source": { "mode": "device" }
+      },
+      "effects": [{ 
+      "type": "none", 
+      "ampPx": 0, 
+      "speed": 0
+      },{
+        "type": "none", 
+        "periodMs": 1400, 
+        "maxScale": 1.25, 
+        "fade": true 
+      }]
+    },
+    {
+      "id": "L28",
+      "imageRef": { "kind": "urlId", "id": "CLOCKBG" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 28 },
+      "angleDeg": 0,
+      "spinRPM": 0,
+      "spinDir": "cw",
+      "orbitRPM": 0,
+      "orbitDir": "cw",
+      "orbitCenter": { "xPct": 50, "yPct": 50 },
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": "none",
+      "orbitOrientDeg": 0,
+      "clock": {
+        "enabled": false,
+        "hand": "second",
+        "handSpin": "second",
+        "handOrbit": "second",
+        "format": 12,
+        "overrideSpin": false,
+        "overrideOrbit": false,
+        "tipDeg": 90,
+        "smooth": true,
+        "source": { "mode": "device", "tzOffsetMinutes": null }
+      }
+    },
+    {
+      "id": "L2",
+      "imageRef": { "kind": "urlId", "id": "SUN" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 27.5 },
+      "angleDeg": 0,
+      "spinRPM": 0,
+      "spinDir": "cw"
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ]
+}
