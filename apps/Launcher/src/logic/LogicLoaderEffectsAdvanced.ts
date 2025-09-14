@@ -1,4 +1,4 @@
-import type { Application, Sprite, Container } from 'pixi.js'
+import { Application, Sprite } from 'pixi.js'
 import type { BuiltLayer } from './LogicTypes'
 import type { LayerConfig } from './sceneTypes'
 import { isWebGLAvailable } from './LogicCapability'
@@ -121,4 +121,3 @@ export function buildEffectsAdvanced(app: Application, built: BuiltLayer[]) {
 
   return { items, tick, cleanup }
 }
-
