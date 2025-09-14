@@ -34,3 +34,7 @@ supabase/.temp/
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
+
+# Supabase secrets (never commit)
+supabase/SUPABASE_SECRET.md
+supabase/*SECRET*.md
