@@ -3,6 +3,7 @@ import { LauncherBtnPanel } from '../ui/LauncherBtn'
 import { useLauncherBtnGesture } from '../ui/LauncherBtnGesture'
 import LogicRendererBadge from './LogicRendererBadge'
 import LauncherUpdater from './LauncherUpdater'
+import LogicApiTester from './LogicApiTester'
 import LogicStage from './LogicStage'
 import LogicStageDom from './LogicStageDom'
 import { detectRenderer, type RendererMode } from './LogicCapability'
@@ -48,6 +49,7 @@ export default function LauncherScreen(props: LauncherScreenProps) {
       />
       {/* Renderer badge and updater (hold with launcher) */}
       <LogicRendererBadge visible={gesture.open} label={label} />
+      <LogicApiTester visible={gesture.open} />
       <LauncherUpdater visible={gesture.open} />
     </div>
   )
