@@ -27,9 +27,9 @@
 
   "layers": [
     {
-      "id": "L10",
+      "id": "L",
       "imageRef": { "kind": "urlId", "id": "STARBGPURE" },
-      "position": { "xPct": 40, "yPct": 50 },
+      "position": { "xPct": 50, "yPct": 50 },
       "scale": { "pct": 110 },
       "angleDeg": 0,
       "spinRPM": 0,
@@ -55,7 +55,7 @@
     },
 
     {
-      "id": "L11",
+      "id": "L",
       "imageRef": { "kind": "urlId", "id": "BG2" },
       "position": { "xPct": 65, "yPct": 40.5 },
       "scale": { "pct": 50 },
@@ -68,7 +68,7 @@
 
 
     {
-      "id": "L15",
+      "id": "L",
       "imageRef": { "kind": "urlId", "id": "BG2" },
       "position": { "xPct": 43, "yPct": 52 },
       "scale": { "pct": 35 },
@@ -79,7 +79,7 @@
       "orbitOrientDeg": 0
     },
     {
-      "id": "L14",
+      "id": "L",
       "imageRef": { "kind": "urlId", "id": "BG3" },
       "position": { "xPct": 50, "yPct": 50 },
       "scale": { "pct": 43 },
@@ -94,7 +94,7 @@
 
     },
     {
-      "id": "L16",
+      "id": "L",
       "imageRef": { "kind": "urlId", "id": "BG4" },
       "position": { "xPct": 71, "yPct": 55 },
       "scale": { "pct": 65 },
@@ -108,7 +108,7 @@
       "orbitOrientDeg": 0
     },
     {
-      "id": "L13",
+      "id": "L",
       "imageRef": { "kind": "urlId", "id": "BG4" },
       "position": { "xPct": 31, "yPct": 64 },
       "scale": { "pct": 120 },
@@ -122,7 +122,7 @@
       "orbitOrientDeg": 0
     },
     {
-      "id": "L17",
+      "id": "L",
       "imageRef": { "kind": "urlId", "id": "BG2" },
       "position": { "xPct": 55, "yPct": 38 },
       "scale": { "pct": 15 },
@@ -136,7 +136,7 @@
       "orbitOrientDeg": 0
     },
     {
-      "id": "L19",
+      "id": "L",
       "imageRef": { "kind": "urlId", "id": "STARBGHOLE" },
       "position": { "xPct": 50, "yPct": 50 },
       "scale": { "pct": 110 },
@@ -163,7 +163,7 @@
       }
     },
     {
-      "id": "L21",
+      "id": "L",
       "imageRef": { "kind": "urlId", "id": "BG8" },
       "position": { "xPct": 50, "yPct": 50 },
       "scale": { "pct": 28 },
@@ -183,7 +183,7 @@
       }
     },
     {
-      "id": "L25",
+      "id": "L",
       "imageRef": { "kind": "urlId", "id": "BG6" },
       "position": { "xPct": 50, "yPct": 50 },
       "scale": { "pct": 55 },

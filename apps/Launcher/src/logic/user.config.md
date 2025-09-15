@@ -47,3 +47,10 @@ This file summarizes all layer config fields and effects with value ranges and d
 
 Notes: Advanced effects enable on capable devices; Phase 1 always works (Pixi & DOM).
 
+### Tilt (Phase 1)
+- `type: "tilt"`
+  - Lightweight interactive rotation offset applied after spin/orbit/clock
+  - `mode`: "pointer" | "time" | "device" (default "pointer")
+  - `axis`: "both" | "x" | "y" (default "both"). Mapping: x→use vertical pointer, y→use horizontal pointer (negated), both→average
+  - `maxDeg`: number (default 8)
+  - `periodMs`: number (only for `mode: "time"`, default 4000)

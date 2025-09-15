@@ -55,6 +55,15 @@ export type LayerConfig = {
         phaseDeg?: number // default 0
       }
     | {
+        // Lightweight rotation offset added after spin/orbit/clock.
+        // Useful for subtle interactive parallax.
+        type: 'tilt'
+        mode?: 'pointer' | 'device' | 'time' // default 'pointer'
+        axis?: 'both' | 'x' | 'y' // default 'both'
+        maxDeg?: number // default 8
+        periodMs?: number // only for mode 'time' (default 4000)
+      }
+    | {
         type: 'glow'
         color?: number // 0xRRGGBB
         alpha?: number // 0..1 default 0.4

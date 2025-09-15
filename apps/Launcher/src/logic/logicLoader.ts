@@ -138,6 +138,7 @@ export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): P
   ;(container as any)._cleanup = () => {
     try { window.removeEventListener('resize', resizeListener) } catch {}
     try { if (spinItems.length > 0 || orbit.items.length > 0 || clock.items.length > 0 || effects.items.length > 0 || adv.items.length > 0) app.ticker.remove(tick) } catch {}
+    try { (effects as any).cleanup?.() } catch {}
     try { adv.cleanup() } catch {}
     try { prevCleanup?.() } catch {}
   }

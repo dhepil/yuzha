@@ -35,6 +35,8 @@ type ImgItem = {
     | { kind: 'fade'; from: number; to: number; durationMs: number; loop: boolean; easing: 'linear' | 'sineInOut' }
     | { kind: 'pulse'; property: 'scale' | 'alpha'; amp: number; periodMs: number; phaseDeg: number }
   >
+  // tilt (lightweight interactive rotation)
+  tilt?: { kind: 'tilt'; mode: 'pointer' | 'time' | 'device'; axis: 'both' | 'x' | 'y'; maxDeg: number; periodMs?: number }
 }
 
 function urlForImageRef(cfg: LogicConfig, ref: LayerConfig['imageRef']): string | null {
@@ -79,6 +81,28 @@ export default function LogicStageDom() {
     const root = rootRef.current
     if (!root) return
     root.style.position = 'relative'
+
+    // pointer state for tilt
+    let px = 0.5
+    let py = 0.5
+    const onMouse = (ev: MouseEvent) => {
+      const w = window.innerWidth || 1
+      const h = window.innerHeight || 1
+      px = Math.max(0, Math.min(1, ev.clientX / w))
+      py = Math.max(0, Math.min(1, ev.clientY / h))
+    }
+    const onTouch = (ev: TouchEvent) => {
+      const t = ev.touches && ev.touches[0]
+      if (!t) return
+      const w = window.innerWidth || 1
+      const h = window.innerHeight || 1
+      px = Math.max(0, Math.min(1, t.clientX / w))
+      py = Math.max(0, Math.min(1, t.clientY / h))
+    }
+    try {
+      window.addEventListener('mousemove', onMouse, { passive: true })
+      window.addEventListener('touchmove', onTouch, { passive: true })
+    } catch {}
 
     // Build images
     const items: ImgItem[] = []
@@ -127,8 +151,9 @@ export default function LogicStageDom() {
         ? toRad(((phaseDeg % 360) + 360) % 360)
         : Math.atan2(start.y - cy, start.x - cx)
 
-      // Effects parse (only pulse/fade)
+      // Effects parse (fade/pulse + tilt)
       const effs: ImgItem['effs'] = []
+      let tilt: ImgItem['tilt'] | undefined
       if (Array.isArray(layer.effects)) {
         for (const e of layer.effects) {
           if (!e || typeof e !== 'object') continue
@@ -149,6 +174,14 @@ export default function LogicStageDom() {
               periodMs: typeof (e as any).periodMs === 'number' && (e as any).periodMs > 0 ? (e as any).periodMs : 1000,
               phaseDeg: typeof (e as any).phaseDeg === 'number' ? (e as any).phaseDeg : 0,
             })
+          } else if ((e as any).type === 'tilt') {
+            tilt = {
+              kind: 'tilt',
+              mode: ((e as any).mode === 'time' || (e as any).mode === 'device') ? (e as any).mode : 'pointer',
+              axis: ((e as any).axis === 'x' || (e as any).axis === 'y') ? (e as any).axis : 'both',
+              maxDeg: typeof (e as any).maxDeg === 'number' ? (e as any).maxDeg : 8,
+              periodMs: typeof (e as any).periodMs === 'number' && (e as any).periodMs > 0 ? (e as any).periodMs : 4000,
+            }
           }
         }
       }
@@ -177,6 +210,7 @@ export default function LogicStageDom() {
         clockTipRad: toRad(layer.clock?.tipDeg ?? 90),
         clockSource: { mode: layer.clock?.source?.mode ?? 'device', tzOffsetMinutes: layer.clock?.source?.tzOffsetMinutes ?? null },
         effs,
+        tilt,
       })
     }
 
@@ -274,6 +308,26 @@ export default function LogicStageDom() {
           }
         }
 
+        // Tilt (applied after spin/orbit/clock)
+        if (it.tilt) {
+          const axisCount = it.tilt.axis === 'both' ? 2 : 1
+          let tiltRad = 0
+          if (it.tilt.mode === 'time') {
+            const T = (it.tilt.periodMs ?? 4000) / 1000
+            if (T > 0) tiltRad = ((it.tilt.maxDeg * Math.sin((2*Math.PI/T)*elapsed)) * Math.PI) / 180
+          } else {
+            const dx = (px - 0.5) * 2
+            const dy = (py - 0.5) * 2
+            let v = 0
+            if (it.tilt.axis === 'x') v = dy
+            else if (it.tilt.axis === 'y') v = -dx
+            else v = (dy + -dx) / axisCount
+            const deg = Math.max(-it.tilt.maxDeg, Math.min(it.tilt.maxDeg, v * it.tilt.maxDeg))
+            tiltRad = (deg * Math.PI) / 180
+          }
+          angle += tiltRad
+        }
+
         it.el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${(angle * 180) / Math.PI}deg) scale(${s})`
         // Effects (phase 1)
         if (it.effs && it.effs.length) {
@@ -328,6 +382,8 @@ export default function LogicStageDom() {
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', onResize)
+      try { window.removeEventListener('mousemove', onMouse as any) } catch {}
+      try { window.removeEventListener('touchmove', onTouch as any) } catch {}
       for (const it of imgsRef.current) {
         try { root.removeChild(it.el) } catch {}
       }
