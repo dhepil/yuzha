@@ -1,6 +1,7 @@
 import type { Application, Sprite } from 'pixi.js'
 import type { LayerConfig } from './sceneTypes'
 import { toRad } from './LogicMath'
+import { STAGE_WIDTH, STAGE_HEIGHT } from '../utils/stage-transform'
 
 // Basic placement & ordering helpers
 
@@ -10,8 +11,8 @@ export function logicZIndexFor(cfg: LayerConfig): number {
 }
 
 export function logicApplyBasicTransform(app: Application, sp: Sprite, cfg: LayerConfig) {
-  const w = app.renderer.width
-  const h = app.renderer.height
+  const w = STAGE_WIDTH
+  const h = STAGE_HEIGHT
   const xPct = cfg.position.xPct ?? 0
   const yPct = cfg.position.yPct ?? 0
   sp.x = (xPct / 100) * w

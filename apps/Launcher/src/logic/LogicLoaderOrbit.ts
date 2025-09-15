@@ -2,6 +2,7 @@ import type { Application, Sprite } from 'pixi.js'
 import type { BuiltLayer } from './LogicTypes'
 import type { LayerConfig } from './sceneTypes'
 import { clamp, clamp01, toRad, normDeg, clampRpm60 } from './LogicMath'
+import { STAGE_WIDTH, STAGE_HEIGHT } from '../utils/stage-transform'
 
 export type OrbitItem = {
   sprite: Sprite
@@ -59,8 +60,8 @@ export function buildOrbit(app: Application, built: BuiltLayer[], spinRpmBySprit
       y: clamp(c.yPct ?? 50, 0, 100),
     }
     const dir = (b.cfg.orbitDir === 'ccw') ? -1 : 1 as 1 | -1
-    const w = app.renderer.width
-    const h = app.renderer.height
+    const w = STAGE_WIDTH
+    const h = STAGE_HEIGHT
     const cx = w * (centerPct.x / 100)
     const cy = h * (centerPct.y / 100)
     const bx = w * ((b.cfg.position.xPct ?? 0) / 100)
@@ -94,8 +95,8 @@ export function buildOrbit(app: Application, built: BuiltLayer[], spinRpmBySprit
   }
 
   function recompute(elapsed: number) {
-    const w = app.renderer.width
-    const h = app.renderer.height
+    const w = STAGE_WIDTH
+    const h = STAGE_HEIGHT
     for (const it of items) {
       const oldAngle = Math.atan2(it.sprite.y - it.centerPx.cy, it.sprite.x - it.centerPx.cx)
       const cx = w * (clamp01(it.centerPct.x / 100))

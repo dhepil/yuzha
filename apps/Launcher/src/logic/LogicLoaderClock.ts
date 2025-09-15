@@ -2,6 +2,7 @@ import type { Application, Sprite } from 'pixi.js'
 import type { BuiltLayer } from './LogicTypes'
 import type { LayerConfig } from './sceneTypes'
 import { toRad } from './LogicMath'
+import { STAGE_WIDTH, STAGE_HEIGHT } from '../utils/stage-transform'
 
 type TimeSource = {
   mode: 'device' | 'utc' | 'server'
@@ -84,8 +85,8 @@ export function buildClock(app: Application, built: BuiltLayer[]) {
       // derive orbit geometry (reusing orbit semantics)
       const c = b.cfg.orbitCenter || { xPct: 50, yPct: 50 }
       const centerPct = { x: Math.max(0, Math.min(100, c.xPct ?? 50)), y: Math.max(0, Math.min(100, c.yPct ?? 50)) }
-      const w = app.renderer.width
-      const h = app.renderer.height
+      const w = STAGE_WIDTH
+      const h = STAGE_HEIGHT
       const cx = w * (centerPct.x / 100)
       const cy = h * (centerPct.y / 100)
       const bx = w * ((b.cfg.position.xPct ?? 0) / 100)
