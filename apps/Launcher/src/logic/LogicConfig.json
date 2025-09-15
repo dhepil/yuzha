@@ -32,7 +32,7 @@
       "position": { "xPct": 50, "yPct": 50 },
       "scale": { "pct": 110 },
       "angleDeg": 0,
-      "spinRPM": 0,
+      "spinRPM": 2,
       "spinDir": "cw",
       "orbitRPM": 0,
       "orbitDir": "cw",
@@ -139,9 +139,9 @@
       "id": "L",
       "imageRef": { "kind": "urlId", "id": "STARBGHOLE" },
       "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 110 },
+      "scale": { "pct": 200 },
       "angleDeg": 0,
-      "spinRPM": 0,
+      "spinRPM": 1,
       "spinDir": "cw",
       "orbitRPM": 0,
       "orbitDir": "cw",
@@ -258,13 +258,22 @@
       }
     },
     {
-      "id": "L2",
-      "imageRef": { "kind": "urlId", "id": "SUN" },
+      "id": "L29",
+      "imageRef": { "kind": "urlId", "id": "BG3" },
       "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 27.5 },
+      "scale": { "pct": 100 },
       "angleDeg": 0,
       "spinRPM": 0,
-      "spinDir": "cw"
+      "spinDir": "cw",
+      "effects": [
+        { "type": "fade", "from": 0.8, "to": 1, "durationMs": 1500, "loop": true, "easing": "sineInOut" },
+        { "type": "pulse", "property": "scale", "amp": 0.05, "periodMs": 1800, "phaseDeg": 0 },
+        { "type": "tilt", "mode": "pointer", "axis": "both", "maxDeg": 6 },
+        { "type": "glow", "color": 16753920, "alpha": 0.35, "scale": 0.2, "pulseMs": 2000 },
+        { "type": "bloom", "strength": 0.6 },
+        { "type": "distort", "ampPx": 2, "speed": 0.4 },
+        { "type": "shockwave", "periodMs": 1200, "maxScale": 1.3, "fade": true }
+      ]
     }
 
 
