@@ -4,6 +4,42 @@ import type { LogicConfig } from './sceneTypes'
 // Later we can physically move the JSON into this folder.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - JSON import without type
-import cfg from './LogicConfig.json'
+import rawConfig from './LogicConfig.json'
 
-export default cfg as LogicConfig
+const assetManifest = import.meta.glob('../Asset/**/*.{png,jpg,jpeg,gif,webp,avif,svg}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>
+
+const SRC_ASSET_PREFIXES = ['/src/Asset/', 'src/Asset/']
+
+function resolveBundledAsset(path: string): string | null {
+  for (const prefix of SRC_ASSET_PREFIXES) {
+    if (path.startsWith(prefix)) {
+      const relative = path.slice(prefix.length)
+      const manifestKey = `../Asset/${relative}`
+      const mapped = assetManifest[manifestKey]
+      if (mapped) return mapped
+      console.warn('[logic] Missing bundled asset for', path)
+      return null
+    }
+  }
+  return null
+}
+
+function remapRegistry(cfg: LogicConfig): LogicConfig {
+  const registry = { ...cfg.imageRegistry }
+  for (const [key, value] of Object.entries(registry)) {
+    const mapped = resolveBundledAsset(value)
+    if (mapped) registry[key] = mapped
+  }
+  return {
+    ...cfg,
+    imageRegistry: registry,
+  }
+}
+
+const config = remapRegistry(rawConfig as LogicConfig)
+
+export default config
