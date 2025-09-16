@@ -26,7 +26,7 @@
     "GEAR1": "/src/Asset/GEAR1.png",
     "GEAR2": "/src/Asset/GEAR2.png",
     "GEAR3": "/src/Asset/GEAR3.png",
-    "GEARMOON": "/src/Asset/.png",
+    "GEARMOON": "/src/Asset/GEARMOON.png",
     "CLOCKGLOW": "/src/Asset/CLOCKGLOW.png",
     "CLOCKGLOW1": "/src/Asset/CLOCKGLOW1.png",
     "CLOCKGLOW2": "/src/Asset/CLOCKGLOW2.png",
@@ -125,6 +125,22 @@
       "scale": { "pct": 110 },
       "spinRPM": 1.8,
       "spinDir": "cw"
+    },
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "GEARMOON" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 80 },
+      "spinRPM": 1.6,
+      "spinDir": "cw"
+    },
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "GEAR1" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 50 },
+      "spinRPM": 1,
+      "spinDir": "ccw"
     },
 
 
@@ -229,7 +245,26 @@
       "id": "L35",
       "imageRef": { "kind": "urlId", "id": "CLOCKGLOW" },
       "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 65.5 }
+      
+    },
+
+    {
+      "id": "L16",
+      "imageRef": { "kind": "urlId", "id": "CLOCKGLOW1" },
+      "position": { "xPct": 50, "yPct": 50 },
       "scale": { "pct": 65.5 },
+      "spinRPM": 1,
+      "spinDir": "cw",
+      "effects": [
+         { "type": "glow", "color": 16753920, "alpha": 0.01, "scale": 4, "pulseMs": 2000 }
+      ]
+    },
+    {
+      "id": "L35",
+      "imageRef": { "kind": "urlId", "id": "CLOCKGLOW2" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 90 },
       "effects": [
          { "type": "glow", "color": 16753920, "alpha": 0.01, "scale": 4, "pulseMs": 2000 }
       ]
