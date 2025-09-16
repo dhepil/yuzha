@@ -11,269 +11,297 @@
     "L90","L91","L92","L93","L94","L95","L96","L97","L98","L99"
   ],
   "imageRegistry": {
-    "SUN": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/-A4_d1qakkWz8EcpcI8xdw/SUN.png",
-    "STARBGHOLE": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/t20nEu85JE6LalepCRD9vw/BGSTARHOLE1.png",
-    "STARBGPURE": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/2WLIgK5uXUy0U5NNplABfw/BGSTAR.png",
-    "BG2": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/ARvX_gUYLkSkSIG_gzVbZw/BG2.png",
-    "BG3": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/4SWnpLA1cUKAHq3upktMbw/BG3.png",
-    "BG4": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/bYje8PnH_kihoVay60757A/BG4.png",
-    "BG5": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/BWs183Ug2EmiMOU3Gzc4Eg/BG5.png",
-    "BG6": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/fx3IbE-bj0WnLBC8L7l5lA/BG6.png",
-    "BG7": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/AcxW45MJQUe-iDjpFzi-Rg/BG7.png",
-    "BG8": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/aPZxEbAPEUOH6VSqgdG5Cw/BG8.png",
-    "BG9": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/B1Y3UYo-Fkmn7za7EHZD_g/BG9.png",
-    "CLOCKBG": "https://cdn-hk.icons8.com/C0lfnSOFrU6YkFZwl65jDA/W-I8lHq1l0qmAyOtikF8NQ/CLOCK-BG.png"
+    "a": "/src/Asset/SAMPLE.png",
+
+    "NOON": "/src/Asset/UI_ClockIcon_Noon.png",
+    "DAWN": "/src/Asset/UI_ClockIcon_Morning.png",
+    "DUSK": "/src/Asset/UI_ClockIcon_Dusk.png",
+    "NIGHT": "/src/Asset/UI_ClockIcon_Night.png",
+
+    "STARBGHOLE": "/src/Asset/STARBGHOLE1.png",
+    "STARBG": "/src/Asset/STARBG.png",
+    "STAR1": "/src/Asset/Enviro_Stars.png",
+    "STAR2": "/src/Asset/Enviro_Stars_Big.png",
+
+    "GEAR1": "/src/Asset/GEAR1.png",
+    "GEAR2": "/src/Asset/GEAR2.png",
+    "GEAR3": "/src/Asset/GEAR3.png",
+    "GEARMOON": "/src/Asset/.png",
+    "CLOCKGLOW": "/src/Asset/CLOCKGLOW.png",
+    "CLOCKGLOW1": "/src/Asset/CLOCKGLOW1.png",
+    "CLOCKGLOW2": "/src/Asset/CLOCKGLOW2.png",
+    "CLOCKBG": "/src/Asset/CLOCKBG.png",
+    "HAND1": "/src/Asset/UI_Clock_HourHand.png",
+    "HAND2": "/src/Asset/UI_Clock_MinuteHand.png",
+
+
+
+    "BUBBLE": "/src/Asset/BUBBLE.png",
+    "DESK": "/src/Asset/AchieveMedal_Desk_Short02.png",
+    "SYSHEAD": "/src/Asset/SystemMessageBg.png",
+    "GEAR6": "/src/Asset/UI_Img_SlimeCannont_Pic_06.png",
+    "GEAR7": "/src/Asset/UI_Img_SlimeCannont_Pic_07.png",
+    "GEAR8": "/src/Asset/UI_Img_SlimeCannont_Pic_08.png",
+    "GREENDOTOFF": "/src/Asset/Prestige_SlotBase_Off.png",
+    "GREENDOTON": "/src/Asset/Prestige_SlotBase.png",
+    
+
+
+
+
+
+
+
+    "LOCK": "/src/Asset/V3_LockIcon.png"
   },
 
   "layers": [
+    
     {
-      "id": "L",
-      "imageRef": { "kind": "urlId", "id": "STARBGPURE" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 110 },
-      "angleDeg": 0,
-      "spinRPM": 2,
-      "spinDir": "cw",
-      "orbitRPM": 0,
-      "orbitDir": "cw",
-      "orbitCenter": { "xPct": 50, "yPct": 50 },
-      "orbitPhaseDeg": null,
-      "orbitOrientPolicy": "none",
-      "orbitOrientDeg": 0,
-      "clock": {
-        "enabled": false,
-        "hand": "second",
-        "handSpin": "second",
-        "handOrbit": "second",
-        "format": 12,
-        "overrideSpin": false,
-        "overrideOrbit": false,
-        "tipDeg": 90,
-        "smooth": true,
-        "source": { "mode": "device", "tzOffsetMinutes": null }
-      }
-    },
-
-    {
-      "id": "L",
-      "imageRef": { "kind": "urlId", "id": "BG2" },
-      "position": { "xPct": 65, "yPct": 40.5 },
-      "scale": { "pct": 50 },
-      "angleDeg": 0,
-      "spinRPM": 2,
-      "spinDir": "cw",
-      "orbitOrientPolicy": "auto",
-      "orbitOrientDeg": 0
-    },
-
-
-    {
-      "id": "L",
-      "imageRef": { "kind": "urlId", "id": "BG2" },
-      "position": { "xPct": 43, "yPct": 52 },
-      "scale": { "pct": 35 },
-      "angleDeg": 0,
-      "spinRPM": 2,
-      "spinDir": "cw",
-      "orbitOrientPolicy": "auto",
-      "orbitOrientDeg": 0
-    },
-    {
-      "id": "L",
-      "imageRef": { "kind": "urlId", "id": "BG3" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 43 },
-      "angleDeg": 11,
-      "spinRPM": 1,
-      "spinDir": "cw",
-      "orbitRPM": 0,
-      "orbitDir": "ccw",
-      "orbitCenter": { "xPct": 50, "yPct": 50 },
-      "orbitOrientPolicy": "auto",
-      "orbitOrientDeg": 0
-
-    },
-    {
-      "id": "L",
-      "imageRef": { "kind": "urlId", "id": "BG4" },
-      "position": { "xPct": 71, "yPct": 55 },
-      "scale": { "pct": 65 },
-      "angleDeg": 0,
-      "spinRPM": 2.1,
-      "spinDir": "ccw",
-      "orbitRPM": 0,
-      "orbitDir": "cw",
-      "orbitCenter": { "xPct": 50, "yPct": 50 },
-      "orbitOrientPolicy": "auto",
-      "orbitOrientDeg": 0
-    },
-    {
-      "id": "L",
-      "imageRef": { "kind": "urlId", "id": "BG4" },
-      "position": { "xPct": 31, "yPct": 64 },
-      "scale": { "pct": 120 },
-      "angleDeg": 0,
-      "spinRPM": 2.1,
-      "spinDir": "ccw",
-      "orbitRPM": 0,
-      "orbitDir": "cw",
-      "orbitCenter": { "xPct": 50, "yPct": 50 },
-      "orbitOrientPolicy": "auto",
-      "orbitOrientDeg": 0
-    },
-    {
-      "id": "L",
-      "imageRef": { "kind": "urlId", "id": "BG2" },
-      "position": { "xPct": 55, "yPct": 38 },
-      "scale": { "pct": 15 },
-      "angleDeg": 0,
-      "spinRPM": 3,
-      "spinDir": "cw",
-      "orbitRPM": 0,
-      "orbitDir": "cw",
-      "orbitCenter": { "xPct": 50, "yPct": 50 },
-      "orbitOrientPolicy": "auto",
-      "orbitOrientDeg": 0
-    },
-    {
-      "id": "L",
-      "imageRef": { "kind": "urlId", "id": "STARBGHOLE" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 200 },
-      "angleDeg": 0,
-      "spinRPM": 1,
-      "spinDir": "cw",
-      "orbitRPM": 0,
-      "orbitDir": "cw",
-      "orbitCenter": { "xPct": 50, "yPct": 50 },
-      "orbitPhaseDeg": null,
-      "orbitOrientPolicy": "none",
-      "orbitOrientDeg": 0,
-      "clock": {
-        "enabled": false,
-        "hand": "second",
-        "handSpin": "second",
-        "handOrbit": "second",
-        "format": 12,
-        "overrideSpin": false,
-        "overrideOrbit": false,
-        "tipDeg": 90,
-        "smooth": true,
-        "source": { "mode": "device", "tzOffsetMinutes": null }
-      }
-    },
-    {
-      "id": "L",
-      "imageRef": { "kind": "urlId", "id": "BG8" },
+      "id": "L10",
+      "imageRef": { "kind": "urlId", "id": "a" },
       "position": { "xPct": 50, "yPct": 50 },
       "scale": { "pct": 28 },
       "angleDeg": 0,
       "spinRPM": 0,
       "spinDir": "cw",
+      "orbitRPM": 0,
+      "orbitDir": "cw",
+      "orbitCenter": { "xPct": 50, "yPct": 50 },
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": "none",
+      "orbitOrientDeg": 0,
       "clock": {
         "enabled": false,
-        "handSpin": "minute",
-        "handOrbit": "hour",
-        "format": 12,
-        "overrideSpin": true,
-        "overrideOrbit": true,
-        "tipDeg": 90,
-        "smooth": true,
-        "source": { "mode": "device" }
-      }
-    },
-    {
-      "id": "L",
-      "imageRef": { "kind": "urlId", "id": "BG6" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 55 },
-      "angleDeg": 0,
-      "spinRPM": 0,
-      "spinDir": "cw"
-    },
-    {
-      "id": "L26",
-      "imageRef": { "kind": "urlId", "id": "BG7" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 55.5 },
-      "angleDeg": 0,
-      "spinRPM": 0,
-      "spinDir": "cw"
-    },
-    {
-      "id": "L27",
-      "imageRef": { "kind": "urlId", "id": "BG8" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 55 },
-      "angleDeg": 0,
-      "spinRPM": 5,
-      "spinDir": "cw",
-      "clock": {
-        "enabled": true,
+        "hand": "second",
         "handSpin": "second",
-        "handOrbit": "hour",
+        "handOrbit": "second",
         "format": 12,
-        "overrideSpin": true,
-        "overrideOrbit": true,
+        "overrideSpin": false,
+        "overrideOrbit": false,
         "tipDeg": 90,
         "smooth": true,
-        "source": { "mode": "device" }
+        "source": { "mode": "device", "tzOffsetMinutes": null }
       },
-      "effects": [{ 
-      "type": "none", 
-      "ampPx": 0, 
-      "speed": 0
-      },{
-        "type": "none", 
-        "periodMs": 1400, 
-        "maxScale": 1.25, 
-        "fade": true 
-      }]
-    },
-    {
-      "id": "L28",
-      "imageRef": { "kind": "urlId", "id": "CLOCKBG" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 28 },
-      "angleDeg": 0,
-      "spinRPM": 0,
-      "spinDir": "cw",
-      "orbitRPM": 0,
-      "orbitDir": "cw",
-      "orbitCenter": { "xPct": 50, "yPct": 50 },
-      "orbitPhaseDeg": null,
-      "orbitOrientPolicy": "none",
-      "orbitOrientDeg": 0,
-      "clock": {
-        "enabled": false,
-        "hand": "second",
-        "handSpin": "second",
-        "handOrbit": "second",
-        "format": 12,
-        "overrideSpin": false,
-        "overrideOrbit": false,
-        "tipDeg": 90,
-        "smooth": true,
-        "source": { "mode": "device", "tzOffsetMinutes": null }
-      }
-    },
-    {
-      "id": "L29",
-      "imageRef": { "kind": "urlId", "id": "BG3" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 100 },
-      "angleDeg": 0,
-      "spinRPM": 0,
-      "spinDir": "cw",
       "effects": [
         { "type": "fade", "from": 0.8, "to": 1, "durationMs": 1500, "loop": true, "easing": "sineInOut" },
         { "type": "pulse", "property": "scale", "amp": 0.05, "periodMs": 1800, "phaseDeg": 0 },
         { "type": "tilt", "mode": "pointer", "axis": "both", "maxDeg": 6 },
         { "type": "glow", "color": 16753920, "alpha": 0.35, "scale": 0.2, "pulseMs": 2000 },
         { "type": "bloom", "strength": 0.6 },
-        { "type": "distort", "ampPx": 2, "speed": 0.4 },
+        { "type": "distort", "ampPx": 1, "speed": 0.4 },
         { "type": "shockwave", "periodMs": 1200, "maxScale": 1.3, "fade": true }
       ]
+
+    },
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "STARBG" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 64.3 },
+      "spinRPM": 0.3,
+      "spinDir": "cw"
+    },
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "GEAR1" },
+      "position": { "xPct": 20, "yPct": 60 },
+      "scale": { "pct": 160 },
+      "spinRPM": 1,
+      "spinDir": "cw"
+    },
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "GEAR2" },
+      "position": { "xPct": 40, "yPct": 40 },
+      "scale": { "pct": 81 },
+      "spinRPM": 1.5,
+      "spinDir": "ccw"
+    },
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "GEAR3" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 110 },
+      "spinRPM": 1.8,
+      "spinDir": "cw"
+    },
+
+
+
+
+
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "STARBGHOLE" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 64.3 },
+      "spinRPM": 0.3,
+      "spinDir": "cw"
+    },
+
+
+
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "STAR1" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 150 },
+      "spinRPM": 0.7,
+      "spinDir": "cw"
+    },
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "STAR2" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 130 },
+      "spinRPM": 0.5,
+      "spinDir": "cw"      
+    },
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "STAR2" },
+      "position": { "xPct": 50, "yPct": 30 },
+      "scale": { "pct": 100 },
+      "spinRPM": 0.5,
+      "spinDir": "cw",
+      "orbitRPM": 1,
+      "orbitDir": "cw",
+      "orbitCenter": { "xPct": 50, "yPct": 50 },
+      "orbitOrientDeg": 0    
+    },
+   
+
+    
+
+
+
+
+    {
+      "id": "L20",
+      "imageRef": { "kind": "urlId", "id": "CLOCKBG" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 70 }   
+    },
+    {
+      "id": "L21",
+      "imageRef": { "kind": "urlId", "id": "NOON" },
+      "position": { "xPct": 50, "yPct": 28 },
+      "scale": { "pct": 60 },
+      "effects": [
+        { "type": "fade", "from": 0.1, "to": 1, "durationMs": 9000, "loop": true, "easing": "sineInOut" },
+        { "type": "pulse", "property": "scale", "amp": 0.05, "periodMs": 5000, "phaseDeg": 0 }
+      ]
+    },
+    {
+      "id": "L21",
+      "imageRef": { "kind": "urlId", "id": "NIGHT" },
+      "position": { "xPct": 50, "yPct": 72 },
+      "scale": { "pct": 66 },
+      "effects": [
+        { "type": "fade", "from": 0.1, "to": 1, "durationMs": 9000, "loop": true, "easing": "sineInOut" },
+        { "type": "pulse", "property": "scale", "amp": 0.05, "periodMs": 5000, "phaseDeg": 0 }
+      ]   
+    },
+    {
+      "id": "L21",
+      "imageRef": { "kind": "urlId", "id": "DUSK" },
+      "position": { "xPct": 72, "yPct": 49.9 },
+      "scale": { "pct": 72 },
+      "effects": [
+        { "type": "fade", "from": 0.1, "to": 1, "durationMs": 9000, "loop": true, "easing": "sineInOut" },
+        { "type": "pulse", "property": "scale", "amp": 0.05, "periodMs": 5000, "phaseDeg": 0 }
+      ]   
+    },
+    {
+      "id": "L21",
+      "imageRef": { "kind": "urlId", "id": "DAWN" },
+      "position": { "xPct": 28, "yPct": 49.5 },
+      "scale": { "pct": 70 },
+      "effects": [
+        { "type": "fade", "from": 0.1, "to": 1, "durationMs": 9000, "loop": true, "easing": "sineInOut" },
+        { "type": "pulse", "property": "scale", "amp": 0.05, "periodMs": 5000, "phaseDeg": 0 }
+      ]   
+    },
+
+
+    {
+      "id": "L35",
+      "imageRef": { "kind": "urlId", "id": "CLOCKGLOW" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 65.5 },
+      "effects": [
+         { "type": "glow", "color": 16753920, "alpha": 0.01, "scale": 4, "pulseMs": 2000 }
+      ]
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {
+      "id": "L15",
+      "imageRef": { "kind": "urlId", "id": "a" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 100 },
+      "spinRPM": 0.5,
+      "spinDir": "cw"
     }
 
 
