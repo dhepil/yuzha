@@ -38,3 +38,5 @@ supabase/.temp/
 # Supabase secrets (never commit)
 supabase/SUPABASE_SECRET.md
 supabase/*SECRET*.md
+.docs/
+.vscode/
