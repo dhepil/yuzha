@@ -1,3 +1,4 @@
+/// <reference path='../_shared/deno-shim.d.ts' />
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { jsonError, jsonSuccess, isOptions, okResponse } from '../_shared/http.ts'
 import { getSupabaseWithAnonKey, getSupabaseWithServiceKey } from '../_shared/supabase.ts'

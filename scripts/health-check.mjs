@@ -8,17 +8,17 @@ if (missing.length) {
   process.exit(1)
 }
 
-const baseFunctionsUrl = process.env.SUPABASE_FUNCTIONS_BASE || ${process.env.SUPABASE_URL}/functions/v1
+const baseFunctionsUrl = process.env.SUPABASE_FUNCTIONS_BASE || `${process.env.SUPABASE_URL}/functions/v1`
 
 const targets = [
   {
     name: 'user-hub-auth health',
-    url: ${baseFunctionsUrl}/user-hub-auth/health,
+    url: `${baseFunctionsUrl}/user-hub-auth/health`,
     method: 'GET'
   },
   {
     name: 'module-passkey health',
-    url: ${baseFunctionsUrl}/module-passkey,
+    url: `${baseFunctionsUrl}/module-passkey`,
     method: 'POST',
     init: {
       headers: { 'Content-Type': 'application/json' },
@@ -27,7 +27,7 @@ const targets = [
   },
   {
     name: 'module-sync summary',
-    url: ${baseFunctionsUrl}/module-sync,
+    url: `${baseFunctionsUrl}/module-sync`,
     method: 'GET',
     requiresAuth: true
   }
@@ -35,8 +35,7 @@ const targets = [
 
 async function getAuthHeader() {
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return undefined
-  const token = process.env.SUPABASE_SERVICE_ROLE_KEY
-  return Bearer 
+  return `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`
 }
 
 async function main() {
@@ -53,14 +52,15 @@ async function main() {
       init.headers.Authorization = authHeader
     }
 
-    process.stdout.write(?  () ... )
+    process.stdout.write(`Checking ${target.name} (${target.url}) ... `)
     try {
       const response = await fetch(target.url, init)
       const text = await response.text()
       if (!response.ok) {
         failures++
-        console.error(FAILED []) 
-        console.error(text.slice(0, 300) + (text.length > 300 ? '…' : ''))
+        console.error(`FAILED [${response.status}]`)
+        const preview = text.length > 300 ? `${text.slice(0, 300)}...` : text
+        console.error(preview)
       } else {
         console.log('ok')
       }
@@ -72,7 +72,7 @@ async function main() {
   }
 
   if (failures > 0) {
-    console.error([health-check]  target(s) failed)
+    console.error(`[health-check] ${failures} target(s) failed`)
     process.exitCode = 1
   } else {
     console.log('[health-check] All targets responded successfully')

@@ -1,3 +1,4 @@
+/// <reference path='./deno-shim.d.ts' />
 const ALLOWED_ORIGIN = Deno.env.get('EDGE_ALLOWED_ORIGIN') ?? '*'
 
 export const corsHeaders: Record<string, string> = {

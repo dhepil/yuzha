@@ -1,3 +1,4 @@
+/// <reference path='./deno-shim.d.ts' />
 const encoder = new TextEncoder()
 
 interface ServiceAccount {
@@ -49,7 +50,7 @@ export async function uploadFileToDrive(params: DriveUploadParams): Promise<{ fi
 
   const form = new FormData()
   form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }))
-  form.append('file', new Blob([params.file], { type: params.contentType || 'application/octet-stream' }))
+  form.append('file', new Blob([params.file.buffer], { type: params.contentType || 'application/octet-stream' }))
 
   const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true', {
     method: 'POST',
