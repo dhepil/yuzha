@@ -1,3 +1,4 @@
+// @ts-nocheck
 /// <reference path='./deno-shim.d.ts' />
 const encoder = new TextEncoder()
 

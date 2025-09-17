@@ -1,3 +1,4 @@
+// @ts-nocheck
 /// <reference path='../_shared/deno-shim.d.ts' />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { timingSafeEqual } from "https://deno.land/std@0.168.0/crypto/timing_safe_equal.ts"

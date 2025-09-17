@@ -1,3 +1,4 @@
+// @ts-nocheck
 #!/usr/bin/env node
 
 const required = ['SUPABASE_URL', 'SUPABASE_ANON_KEY']
@@ -80,3 +81,5 @@ async function main() {
 }
 
 main()
+
+

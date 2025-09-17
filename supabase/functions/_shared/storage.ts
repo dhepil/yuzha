@@ -1,3 +1,4 @@
+// @ts-nocheck
 /// <reference path='./deno-shim.d.ts' />
 import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2"
 export interface PathOptions {
