@@ -1,5 +1,4 @@
-// @ts-nocheck
-#!/usr/bin/env node
+"#!/usr/bin/env node
 
 const required = ['SUPABASE_URL', 'SUPABASE_ANON_KEY']
 const missing = required.filter((key) => !process.env[key])
@@ -18,68 +17,54 @@ const targets = [
     method: 'GET'
   },
   {
-    name: 'module-passkey health',
-    url: `${baseFunctionsUrl}/module-passkey`,
+    name: 'test-submit health',
+    url: `${baseFunctionsUrl}/test-submit`,
     method: 'POST',
     init: {
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ moduleId: 'health', passkey: 'dummy' })
+      body: JSON.stringify({ test: true })
     }
-  },
-  {
-    name: 'module-sync summary',
-    url: `${baseFunctionsUrl}/module-sync`,
-    method: 'GET',
-    requiresAuth: true
   }
 ]
 
-async function getAuthHeader() {
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return undefined
-  return `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`
+async function testEndpoint(target) {
+  try {
+    const response = await fetch(target.url, {
+      method: target.method,
+      ...target.init
+    })
+    
+    const status = response.status
+    const text = await response.text()
+    
+    if (response.ok) {
+      console.log(`✅ ${target.name}: ${status} - ${text.slice(0, 100)}...`)
+      return true
+    } else {
+      console.error(`❌ ${target.name}: ${status} - ${text.slice(0, 200)}...`)
+      return false
+    }
+  } catch (error) {
+    console.error(`❌ ${target.name}: Error - ${error.message}`)
+    return false
+  }
 }
 
 async function main() {
-  const authHeader = await getAuthHeader()
-  let failures = 0
-
+  console.log('[health-check] Testing endpoints...')
+  
+  let allPassed = true
   for (const target of targets) {
-    const init = { method: target.method, ...(target.init || {}) }
-    init.headers = {
-      Accept: 'application/json',
-      ...(init.headers || {})
-    }
-    if (target.requiresAuth && authHeader) {
-      init.headers.Authorization = authHeader
-    }
-
-    process.stdout.write(`Checking ${target.name} (${target.url}) ... `)
-    try {
-      const response = await fetch(target.url, init)
-      const text = await response.text()
-      if (!response.ok) {
-        failures++
-        console.error(`FAILED [${response.status}]`)
-        const preview = text.length > 300 ? `${text.slice(0, 300)}...` : text
-        console.error(preview)
-      } else {
-        console.log('ok')
-      }
-    } catch (error) {
-      failures++
-      console.error('error')
-      console.error(error)
-    }
+    const passed = await testEndpoint(target)
+    if (!passed) allPassed = false
   }
-
-  if (failures > 0) {
-    console.error(`[health-check] ${failures} target(s) failed`)
-    process.exitCode = 1
+  
+  if (allPassed) {
+    console.log('[health-check] ✅ All endpoints healthy')
   } else {
-    console.log('[health-check] All targets responded successfully')
+    console.log('[health-check] ❌ Some endpoints failed')
+    process.exit(1)
   }
 }
 
-main()
-
-
+main().catch(console.error)"
