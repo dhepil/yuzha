@@ -1,7 +1,5 @@
 import type { LogicConfig } from './sceneTypes'
 // Temporary shim: expose config from original location under the new logic/ path
-// Phase 6 keeps behavior identical while callers migrate imports.
-// Later we can physically move the JSON into this folder.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - JSON import without type
 import rawConfig from './LogicConfig.json'
@@ -34,10 +32,7 @@ function remapRegistry(cfg: LogicConfig): LogicConfig {
     const mapped = resolveBundledAsset(value)
     if (mapped) registry[key] = mapped
   }
-  return {
-    ...cfg,
-    imageRegistry: registry,
-  }
+  return { ...cfg, imageRegistry: registry }
 }
 
 const config = remapRegistry(rawConfig as LogicConfig)

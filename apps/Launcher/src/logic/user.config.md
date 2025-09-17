@@ -29,7 +29,7 @@ This file summarizes all layer config fields and effects with value ranges and d
 - `clock.format` (12|24, default 12)
 - `clock.overrideSpin` (boolean, default false)
 - `clock.overrideOrbit` (boolean, default false)
-- `clock.tipDeg` (number, default 90)
+- `clock.tip.angleDeg` (number, default 90)
 - `clock.smooth` (boolean, default true)
 - `clock.source` { `mode`: "device"|"utc"|"server" (default "device"), `tzOffsetMinutes`: number|null }
 

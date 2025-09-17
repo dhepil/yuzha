@@ -51,6 +51,10 @@ export function buildOrbit(app: Application, built: BuiltLayer[], spinRpmBySprit
   const items: OrbitItem[] = []
 
   for (const b of built) {
+    if (b.cfg.clock?.enabled) {
+      continue
+    }
+
     const rpm = clampRpm60(b.cfg.orbitRPM)
     if (rpm <= 0) continue
 

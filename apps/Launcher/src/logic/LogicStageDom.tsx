@@ -1,5 +1,5 @@
 import React from 'react'
-import type { LogicConfig, LayerConfig } from './sceneTypes'
+import type { ClockHand, ClockHandSelection, LogicConfig, LayerConfig } from './sceneTypes'
 import cfgJson from './LogicConfig'
 import { clamp, clamp01, clampRpm60, toRad } from './LogicMath'
 import { logicZIndexFor } from './LogicLoaderBasic'
@@ -125,6 +125,22 @@ export default function LogicStageDom() {
 
       root.appendChild(img)
 
+      const clockCfg = layer.clock
+      const clockEnabled = !!clockCfg?.enabled
+      const spinHandSel: ClockHandSelection = clockCfg?.spinHand ?? (clockEnabled ? 'second' : 'none')
+      const orbitHandSel: ClockHandSelection = clockCfg?.orbitHand ?? 'none'
+      const clockOverrideSpin = clockEnabled && spinHandSel !== 'none'
+      const clockOverrideOrbit = clockEnabled && orbitHandSel !== 'none'
+      const clockHandSpin: ClockHand = spinHandSel === 'none' ? 'second' : spinHandSel
+      const clockHandOrbit: ClockHand = orbitHandSel === 'none' ? 'second' : orbitHandSel
+      const clockFormat = (clockCfg?.format === 24 ? 24 : 12) as 12 | 24
+      const clockSmooth = clockCfg?.smooth ?? true
+      const clockTipRad = toRad(clockCfg?.tip?.angleDeg ?? 90)
+      const clockSourceMode = clockCfg?.timezone ?? 'device'
+      const clockSource = {
+        mode: (clockSourceMode === 'utc' ? 'utc' : clockSourceMode === 'server' ? 'server' : 'device') as 'device' | 'utc' | 'server',
+        tzOffsetMinutes: clockCfg?.source?.tzOffsetMinutes ?? null,
+      }
       // spin
       const sRpm = clampRpm60(layer.spinRPM)
       const spinDir: 1 | -1 = layer.spinDir === 'ccw' ? -1 : 1
@@ -135,8 +151,10 @@ export default function LogicStageDom() {
       const oRpm = clampRpm60(layer.orbitRPM)
       const orbitDir: 1 | -1 = layer.orbitDir === 'ccw' ? -1 : 1
       const orbitRadPerSec = (oRpm * Math.PI) / 30
-      const c = layer.orbitCenter || { xPct: 50, yPct: 50 }
-      const centerPct = { x: clamp(c.xPct ?? 50, 0, 100), y: clamp(c.yPct ?? 50, 0, 100) }
+      const orbitCenterSeed = clockOverrideOrbit
+        ? (clockCfg?.orbitCenter ?? clockCfg?.center ?? layer.orbitCenter ?? { xPct: 50, yPct: 50 })
+        : (layer.orbitCenter ?? { xPct: 50, yPct: 50 })
+      const centerPct = { x: clamp(orbitCenterSeed.xPct ?? 50, 0, 100), y: clamp(orbitCenterSeed.yPct ?? 50, 0, 100) }
       const cx = w * (centerPct.x / 100)
       const cy = h * (centerPct.y / 100)
       const bx = w * ((layer.position.xPct ?? 0) / 100)
@@ -200,15 +218,15 @@ export default function LogicStageDom() {
         basePhase,
         orientPolicy,
         orientDegRad,
-        clockEnabled: !!layer.clock?.enabled,
-        clockOverrideSpin: !!layer.clock?.overrideSpin,
-        clockOverrideOrbit: !!layer.clock?.overrideOrbit,
-        clockHandSpin: (layer.clock?.handSpin ?? layer.clock?.hand ?? 'second'),
-        clockHandOrbit: (layer.clock?.handOrbit ?? layer.clock?.hand ?? 'second'),
-        clockFormat: (layer.clock?.format === 24 ? 24 : 12) as 12|24,
-        clockSmooth: layer.clock?.smooth ?? true,
-        clockTipRad: toRad(layer.clock?.tipDeg ?? 90),
-        clockSource: { mode: layer.clock?.source?.mode ?? 'device', tzOffsetMinutes: layer.clock?.source?.tzOffsetMinutes ?? null },
+        clockEnabled: clockEnabled,
+        clockOverrideSpin,
+        clockOverrideOrbit,
+        clockHandSpin,
+        clockHandOrbit,
+        clockFormat,
+        clockSmooth,
+        clockTipRad,
+        clockSource,
         effs,
         tilt,
       })
@@ -393,3 +411,6 @@ export default function LogicStageDom() {
 
   return <div ref={rootRef} className="w-screen h-screen" />
 }
+
+
+

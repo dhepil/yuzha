@@ -8,6 +8,11 @@ export function buildSpin(app: Application, built: BuiltLayer[]) {
   const items: SpinItem[] = []
   const rpmBySprite = new Map<Sprite, number>()
   for (const b of built) {
+    const clk = b.cfg.clock
+    if (clk?.enabled) {
+      rpmBySprite.set(b.sprite, 0)
+      continue
+    }
     const rpm = clampRpm60(b.cfg.spinRPM)
     if (rpm > 0) {
       const dir = (b.cfg.spinDir === 'ccw') ? -1 : 1 as 1 | -1
