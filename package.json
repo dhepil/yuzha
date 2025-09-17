@@ -31,7 +31,8 @@
     "typecheck:launcher": "npm run typecheck -w apps/Launcher",
     "typecheck:all": "npm run typecheck:launcher",
     "seed:module-passkeys": "node scripts/seed-module-passkeys.mjs",
-    "ci:verify": "npm run typecheck:all && npm run build:launcher"
+    "ci:verify": "npm run typecheck:all && npm run build:launcher",
+    "health:check": "node scripts/health-check.mjs"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
