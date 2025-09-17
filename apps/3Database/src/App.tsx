@@ -1,81 +1,165 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { supabase } from './services/supabaseClient'
+import { usePasskeySession } from '@shared/hooks/usePasskeySession'
+
+const MODULE_NAME = '3Database'
+
+type SubmissionRow = {
+  id: string
+  module_name: string
+  submission_data: Record<string, unknown>
+  created_at: string
+}
 
 export default function App() {
-  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking')
-  const [errorMessage, setErrorMessage] = useState<string>('')
+  const { status, session, error: authError, signIn, signOut } = usePasskeySession(supabase, { moduleId: 'm3_database' })
+  const [passkey, setPasskey] = useState('')
+  const [rows, setRows] = useState<SubmissionRow[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    async function checkConnection() {
-      try {
-        console.log('Testing Supabase connection...')
-        console.log('Supabase client:', supabase)
-        
-        // Test connection by trying to get the current session
-        const { data: { session }, error } = await supabase.auth.getSession()
-        
-        if (error) {
-          console.error('Supabase connection error:', error)
-          setConnectionStatus('error')
-          setErrorMessage(error.message)
-        } else {
-          console.log('Supabase connection successful!')
-          console.log('Current session:', session)
-          setConnectionStatus('connected')
-        }
-      } catch (err) {
-        console.error('Failed to connect to Supabase:', err)
-        setConnectionStatus('error')
-        setErrorMessage(err instanceof Error ? err.message : 'Unknown error')
-      }
+    if (status === 'authenticated') {
+      void loadData()
     }
+  }, [status])
 
-    checkConnection()
-  }, [])
+  async function loadData() {
+    setLoading(true)
+    setError(null)
+    const { data, error } = await supabase
+      .from('module_submissions')
+      .select('id, module_name, submission_data, created_at')
+      .order('created_at', { ascending: false })
+    if (error) setError(error.message)
+    else setRows(data ?? [])
+    setLoading(false)
+  }
+
+  const summary = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const row of rows) {
+      counts.set(row.module_name, (counts.get(row.module_name) ?? 0) + 1)
+    }
+    return Array.from(counts.entries()).map(([module, total]) => ({ module, total }))
+  }, [rows])
+
+  if (status === 'checking') {
+    return (
+      <div className="app-shell flex items-center justify-center">
+        <p className="text-neutral-400">Memeriksa sesi...</p>
+      </div>
+    )
+  }
+
+  if (status !== 'authenticated') {
+    return (
+      <div className="app-shell flex items-center justify-center">
+        <div className="w-full max-w-sm space-y-4 rounded-xl border border-neutral-700 bg-neutral-900/80 p-6">
+          <h1 className="text-xl font-semibold text-white">Masuk Modul DATABASE</h1>
+          <p className="text-sm text-neutral-400">Analisis ringkas semua modul membutuhkan passkey.</p>
+          <form
+            className="space-y-3"
+            onSubmit={async (event) => {
+              event.preventDefault()
+              await signIn(passkey)
+            }}
+          >
+            <input
+              type="password"
+              className="w-full rounded-md border border-neutral-600 bg-neutral-800 px-3 py-2 text-white"
+              placeholder="Passkey"
+              value={passkey}
+              onChange={(event) => setPasskey(event.target.value)}
+            />
+            <button
+              type="submit"
+              className="w-full rounded-md bg-violet-500 py-2 text-sm font-semibold text-white hover:bg-violet-400"
+            >
+              Masuk
+            </button>
+          </form>
+          {authError && <p className="text-sm text-red-400">{authError}</p>}
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="app-shell flex items-center justify-center">
-      <div className="text-center space-y-3">
-        <h1 className="text-2xl font-semibold tracking-tight">DATABASE</h1>
-        <p className="text-sm text-neutral-400">
-          Modul DATABASE - Manajemen dan monitoring basis data.
-        </p>
-        
-        {/* Supabase Connection Status */}
-        <div className="mt-6 p-4 rounded-lg border border-neutral-700 bg-neutral-800/50">
-          <h3 className="text-lg font-medium mb-2">Supabase Connection</h3>
-          
-          {connectionStatus === 'checking' && (
-            <div className="flex items-center gap-2 text-yellow-400">
-              <div className="w-4 h-4 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
-              <span>Checking connection...</span>
-            </div>
+    <div className="app-shell px-6 py-10 text-neutral-100">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
+        <header className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-semibold">DATABASE</h1>
+            <p className="text-sm text-neutral-400">Ikhtisar semua data modul.</p>
+            <p className="text-sm text-neutral-500 mt-1">Total entri: {rows.length}</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => loadData()}
+              className="rounded-md border border-neutral-600 px-3 py-1 text-sm hover:bg-neutral-800"
+              disabled={loading}
+            >
+              {loading ? 'Memuat...' : 'Refresh'}
+            </button>
+            <button
+              onClick={() => signOut()}
+              className="rounded-md border border-neutral-600 px-3 py-1 text-sm hover:bg-neutral-800"
+            >
+              Keluar
+            </button>
+          </div>
+        </header>
+
+        <section className="rounded-xl border border-neutral-700 bg-neutral-900/60 p-6">
+          <h2 className="text-lg font-medium text-white">Ringkasan per Modul</h2>
+          {summary.length === 0 ? (
+            <p className="mt-3 text-sm text-neutral-500">Belum ada data tersimpan.</p>
+          ) : (
+            <table className="mt-4 w-full text-left text-sm">
+              <thead className="text-neutral-400">
+                <tr>
+                  <th className="py-2">Modul</th>
+                  <th className="py-2">Total Entri</th>
+                </tr>
+              </thead>
+              <tbody>
+                {summary.map((item) => (
+                  <tr key={item.module} className="border-t border-neutral-700">
+                    <td className="py-2 font-medium text-neutral-100">{item.module}</td>
+                    <td className="py-2">{item.total}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
-          
-          {connectionStatus === 'connected' && (
-            <div className="flex items-center gap-2 text-green-400">
-              <div className="w-4 h-4 bg-green-400 rounded-full"></div>
-              <span>Connected successfully!</span>
-            </div>
+        </section>
+
+        <section className="rounded-xl border border-neutral-700 bg-neutral-900/40 p-6">
+          <h2 className="text-lg font-medium text-white">Detail Terbaru</h2>
+          {loading && rows.length === 0 ? (
+            <p className="mt-3 text-sm text-neutral-500">Memuat data...</p>
+          ) : rows.length === 0 ? (
+            <p className="mt-3 text-sm text-neutral-500">Belum ada entri.</p>
+          ) : (
+            <ul className="mt-3 space-y-3 text-sm text-neutral-300">
+              {rows.slice(0, 10).map((row) => (
+                <li key={row.id} className="rounded-md border border-neutral-700 bg-neutral-900/60 p-3">
+                  <div className="flex items-center justify-between text-xs text-neutral-500">
+                    <span>{row.module_name}</span>
+                    <span>{new Date(row.created_at).toLocaleString('id-ID')}</span>
+                  </div>
+                  <pre className="mt-2 overflow-x-auto rounded bg-neutral-950/70 p-3 text-xs">
+                    {JSON.stringify(row.submission_data, null, 2)}
+                  </pre>
+                </li>
+              ))}
+            </ul>
           )}
-          
-          {connectionStatus === 'error' && (
-            <div className="text-red-400">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-4 h-4 bg-red-400 rounded-full"></div>
-                <span>Connection failed</span>
-              </div>
-              <p className="text-sm text-red-300 bg-red-900/20 p-2 rounded">
-                {errorMessage}
-              </p>
-            </div>
-          )}
-          
-          <p className="text-xs text-neutral-500 mt-3">
-            Check browser console (F12) for detailed logs
-          </p>
-        </div>
+          {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+        </section>
       </div>
     </div>
   )
 }
+

@@ -30,7 +30,9 @@
     "build:all": "concurrently \"npm run build:launcher\" \"npm run build:0setting\" \"npm run build:1meng\" \"npm run build:3database\" \"npm run build:4extra\" \"npm run build:5rara\"",
     "clean": "rimraf apps/**/dist apps/**/node_modules/.vite",
     "typecheck:launcher": "npm run typecheck -w apps/Launcher",
-    "typecheck:all": "npm run typecheck:launcher"
+    "typecheck:all": "npm run typecheck:launcher",
+
+    "seed:module-passkeys": "node scripts/seed-module-passkeys.mjs"
 
   },
   "devDependencies": {

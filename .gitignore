@@ -40,3 +40,4 @@ supabase/SUPABASE_SECRET.md
 supabase/*SECRET*.md
 .docs/
 .vscode/
+supabase/modulePasswords.json
