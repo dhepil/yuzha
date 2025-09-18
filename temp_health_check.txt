@@ -1,5 +1,5 @@
+﻿// @ts-nocheck
 #!/usr/bin/env node
-// @ts-nocheck
 
 const required = ['SUPABASE_URL', 'SUPABASE_ANON_KEY']
 const missing = required.filter((key) => !process.env[key])
