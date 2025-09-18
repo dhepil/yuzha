@@ -7,7 +7,7 @@ const r = (p: string) => path.resolve(path.dirname(fileURLToPath(import.meta.url
 const monorepoRoot = r('../..')
 
 // Vite 7, ESM. Alias @shared -> root/shared.
-// Force port: 5173, host 0.0.0.0, strictPort ON, allowedHosts sesuai contohmu.
+// Force port: 5000, host 0.0.0.0, strictPort ON, allowedHosts sesuai contohmu.
 export default defineConfig({
   root: r('.'),
   plugins: [react()],
@@ -25,7 +25,7 @@ export default defineConfig({
   
   server: {
     host: '0.0.0.0',
-    port: 5173,
+    port: 5000,
     strictPort: true,
     allowedHosts: [
       ''
@@ -33,10 +33,11 @@ export default defineConfig({
   },
   preview: {
     host: '0.0.0.0',
-    port: 5173
+    port: 5000
   },
   build: {
     target: 'es2020',
     sourcemap: false
   }
 })
+

@@ -3,10 +3,10 @@ import { useLauncherBtnEffect, type LauncherBtnEffectConfig } from './LauncherBt
 import { useLauncherBtnGesture } from './LauncherBtnGesture'
 
 /**
- * LauncherBtn — Panel navigasi ke masing-masing module.
- * - “Open/Hide” dikendalikan oleh gestur HOLD-TAP (via useLauncherBtnGesture).
+ * LauncherBtn - Panel navigasi ke masing-masing module.
+ * - "Open/Hide" dikendalikan oleh gestur HOLD-TAP (via useLauncherBtnGesture).
  * - Efek visual dihubungkan via useLauncherBtnEffect (stub saat ini).
- * - Link modul baca dari ENV (VITE_URL_*), fallback ke localhost:<port> final.
+ * - Link modul baca dari ENV (VITE_URL_*) fallback ke localhost:<port> final.
  *
  * ENV yang didukung (opsional, override fallback lokal):
  *   VITE_URL_0SETTING, VITE_URL_1MENG, VITE_URL_3DATABASE, VITE_URL_4EXTRA, VITE_URL_5RARA
@@ -17,11 +17,11 @@ export type ModuleLink = { id: string; label: string; url: string }
 function getDefaultModuleLinks(): ModuleLink[] {
   const env = import.meta.env as Record<string, string | undefined>
   return [
-    { id: '0setting',  label: '0Setting',   url: env.VITE_URL_0SETTING  ?? 'http://localhost:5000' },
-    { id: '1meng',     label: '1Meng',      url: env.VITE_URL_1MENG     ?? 'http://localhost:5100' },
-    { id: '3database', label: '3Database',  url: env.VITE_URL_3DATABASE ?? 'http://localhost:5300' },
-    { id: '4extra',    label: '4Extra',     url: env.VITE_URL_4EXTRA    ?? 'http://localhost:5400' },
-    { id: '5rara',     label: '5Rara',      url: env.VITE_URL_5RARA     ?? 'http://localhost:5500' }
+    { id: '0setting',  label: '0Setting',   url: env.VITE_URL_0SETTING  ?? 'http://localhost:5001' },
+    { id: '1meng',     label: '1Meng',      url: env.VITE_URL_1MENG     ?? 'http://localhost:5002' },
+    { id: '3database', label: '3Database',  url: env.VITE_URL_3DATABASE ?? 'http://localhost:5003' },
+    { id: '4extra',    label: '4Extra',     url: env.VITE_URL_4EXTRA    ?? 'http://localhost:5004' },
+    { id: '5rara',     label: '5Rara',      url: env.VITE_URL_5RARA     ?? 'http://localhost:5005' }
   ]
 }
 
@@ -103,7 +103,7 @@ export function LauncherBtnPanel(props: LauncherBtnProps) {
 }
 
 /**
- * LauncherBtnDock — util opsional yang langsung menggabungkan gesture + panel.
+ * LauncherBtnDock - util opsional yang langsung menggabungkan gesture + panel.
  * - Pasang ini di App/LauncherScreen untuk pengalaman lengkap.
  * - HOLD-TAP di mana saja pada area overlay akan toggle panel.
  */
@@ -125,3 +125,4 @@ export function LauncherBtnDock(props: Omit<LauncherBtnProps, 'open' | 'onToggle
     </>
   )
 }
+
