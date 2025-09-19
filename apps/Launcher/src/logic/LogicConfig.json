@@ -56,7 +56,6 @@
   },
 
   "layers": [
-    
     {
       "id": "L10",
       "imageRef": { "kind": "urlId", "id": "a" },
@@ -88,6 +87,24 @@
         { "type": "bloom", "strength": 0.6 },
         { "type": "distort", "ampPx": 1, "speed": 0.4 },
         { "type": "shockwave", "periodMs": 1200, "maxScale": 1.3, "fade": true }]
+    },
+    {
+      "id": "L50",
+      "imageRef": { "kind": "urlId", "id": "HAND1" },
+      "position": { "xPct": 50, "yPct": 50 },
+      "scale": { "pct": 75 },
+
+      "clock": {
+        "enabled": true,
+        "center": { "xPct": 50, "yPct": 50 },
+        "base": { "angleDeg": 0 },
+        "tip": { "angleDeg": 0 },
+        "spinHand": "second",
+        "spinRadius": { "pct": 8 },
+        "orbitHand": "",
+        "orbitCenter": { "xPct": 50, "yPct": 80 }},
+      "effects": [
+       ]
     },
 
 
@@ -271,7 +288,11 @@
       "effects": [
          { "type": "glow", "color": 16753920, "alpha": 0.01, "scale": 4, "pulseMs": 2000 }
       ]
+
     },
+    
+
+    
 
 
 
