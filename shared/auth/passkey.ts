@@ -1,41 +1,147 @@
-import type { SupabaseClient, Session } from '@supabase/supabase-js'
+﻿const SESSION_PREFIX = 'yuzha:passkey-session:';
+const SESSION_EVENT = 'yuzha:passkey-session:changed';
 
-export function deriveEmailFromPasskey(passkey: string): string {
-  const normalized = passkey.trim().toLowerCase()
-  if (!normalized) throw new Error('Passkey tidak boleh kosong')
-  return `${normalized}@passkey.yuzha`
+type SessionEventDetail = {
+  moduleId?: string;
+};
+
+export type Session = {
+  moduleId?: string;
+  user: {
+    id: string;
+    passkey: string;
+  };
+  createdAt: string;
+};
+
+let memorySessions: Record<string, Session | undefined> = {};
+
+function deepClone<T>(value: T): T {
+  if (typeof globalThis.structuredClone === 'function') {
+    return globalThis.structuredClone(value);
+  }
+  return JSON.parse(JSON.stringify(value));
 }
 
-export async function signInWithPasskey(
-  client: SupabaseClient,
-  passkey: string
-): Promise<{ session: Session | null; error?: string }> {
+function safeSessionStorage(): Storage | null {
   try {
-    const trimmed = passkey.trim()
-    if (!trimmed) {
-      return { session: null, error: 'Passkey tidak boleh kosong' }
-    }
-
-    const email = deriveEmailFromPasskey(trimmed)
-    let { data, error } = await client.auth.signInWithPassword({ email, password: trimmed })
-    if (error && error.message.toLowerCase().includes('invalid login')) {
-      const signUp = await client.auth.signUp({ email, password: trimmed, options: { data: { passkey: trimmed } } })
-      if (signUp.error && !signUp.error.message.toLowerCase().includes('already registered')) {
-        return { session: null, error: signUp.error.message }
-      }
-      const retry = await client.auth.signInWithPassword({ email, password: trimmed })
-      data = retry.data
-      error = retry.error
-      if (error) return { session: null, error: error.message }
-      return { session: data.session ?? null }
-    }
-    if (error) return { session: null, error: error.message }
-    return { session: data.session ?? null }
-  } catch (err) {
-    return { session: null, error: err instanceof Error ? err.message : String(err) }
+    if (typeof window === 'undefined') return null;
+    return window.sessionStorage;
+  } catch {
+    return null;
   }
 }
 
-export async function signOut(client: SupabaseClient): Promise<void> {
-  await client.auth.signOut()
+function getSessionKey(moduleId?: string): string {
+  return `${SESSION_PREFIX}${moduleId ?? 'global'}`;
+}
+
+function hashValue(value: string): string {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash * 31 + value.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash).toString(16);
+}
+
+function createUserId(passkey: string, moduleId?: string): string {
+  return `local-${moduleId ?? 'global'}-${hashValue(passkey)}`;
+}
+
+function readRawSession(moduleId?: string): Session | null {
+  const key = getSessionKey(moduleId);
+  const storage = safeSessionStorage();
+  if (storage) {
+    const raw = storage.getItem(key);
+    if (raw) {
+      try {
+        return JSON.parse(raw) as Session;
+      } catch {
+        storage.removeItem(key);
+      }
+    }
+  }
+  const fallback = memorySessions[key];
+  return fallback ? deepClone(fallback) : null;
+}
+
+function writeRawSession(session: Session | null, moduleId?: string): void {
+  const key = getSessionKey(moduleId);
+  const storage = safeSessionStorage();
+  if (session) {
+    const serialised = JSON.stringify(session);
+    if (storage) {
+      storage.setItem(key, serialised);
+    }
+    memorySessions[key] = deepClone(session);
+  } else {
+    if (storage) {
+      storage.removeItem(key);
+    }
+    delete memorySessions[key];
+  }
+  notifySessionChange(moduleId);
+}
+
+function notifySessionChange(moduleId?: string): void {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent<SessionEventDetail>(SESSION_EVENT, { detail: { moduleId } }));
+  }
+}
+
+export function getActiveSession(moduleId?: string): Session | null {
+  const session = readRawSession(moduleId);
+  return session ? deepClone(session) : null;
+}
+
+export async function signInWithPasskey(
+  passkey: string,
+  moduleId?: string
+): Promise<{ session: Session | null; error?: string }> {
+  const trimmed = passkey.trim();
+  if (!trimmed) {
+    return { session: null, error: 'Passkey tidak boleh kosong' };
+  }
+
+  const session: Session = {
+    moduleId,
+    user: {
+      id: createUserId(trimmed, moduleId),
+      passkey: trimmed
+    },
+    createdAt: new Date().toISOString()
+  };
+  writeRawSession(session, moduleId);
+  return { session: deepClone(session) };
+}
+
+export async function signOut(moduleId?: string): Promise<void> {
+  writeRawSession(null, moduleId);
+}
+
+export function subscribeToSessionChanges(listener: () => void, moduleId?: string): () => void {
+  if (typeof window === 'undefined') {
+    return () => {};
+  }
+  const handler = (event: Event) => {
+    const detail = (event as CustomEvent<SessionEventDetail>).detail;
+    if (!moduleId || detail?.moduleId === moduleId) {
+      listener();
+    }
+  };
+  window.addEventListener(SESSION_EVENT, handler as EventListener);
+  return () => {
+    window.removeEventListener(SESSION_EVENT, handler as EventListener);
+  };
+}
+
+export function clearSession(moduleId?: string): void {
+  writeRawSession(null, moduleId);
+}
+
+export function clearAllSessions(): void {
+  const keys = Object.keys(memorySessions);
+  for (const key of keys) {
+    writeRawSession(null, key.replace(SESSION_PREFIX, '') || undefined);
+  }
 }

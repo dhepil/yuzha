@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "version": "0.1.0",
-  "description": "Monorepo apps (Launcher + modules) with shared hub. OPSI 3: multi-URL, single Supabase project (multi-schema).",
+  "description": "Monorepo apps (Launcher + modules) with shared hub. OPSI 3: multi-URL, local-only data store.",
   "engines": {
     "node": ">=20"
   },
@@ -30,9 +30,7 @@
     "clean": "rimraf apps/**/dist apps/**/node_modules/.vite",
     "typecheck:launcher": "npm run typecheck -w apps/Launcher",
     "typecheck:all": "npm run typecheck:launcher",
-    "seed:module-passkeys": "node scripts/seed-module-passkeys.mjs",
-    "ci:verify": "npm run typecheck:all && npm run build:launcher",
-    "health:check": "node scripts/health-check.mjs"
+    "ci:verify": "npm run typecheck:all && npm run build:launcher"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",

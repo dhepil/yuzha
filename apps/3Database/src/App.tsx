@@ -1,118 +1,102 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { supabase } from './services/supabaseClient'
-import { usePasskeySession } from '@shared/hooks/usePasskeySession'
+﻿import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { usePasskeySession } from '@shared/hooks/usePasskeySession';
+import {
+  listModuleSubmissions,
+  subscribeToLocalData,
+  type ModuleSubmissionRecord
+} from '@shared/storage/localData';
 
-const MODULE_NAME = '3Database'
-
-type SubmissionRow = {
-  id: string
-  module_name: string
-  submission_data: Record<string, unknown>
-  created_at: string
-}
+type SubmissionRow = ModuleSubmissionRecord;
 
 export default function App() {
-  const { status, session, error: authError, signIn, signOut } = usePasskeySession(supabase, { moduleId: 'm3_database' })
-  const [passkey, setPasskey] = useState('')
-  const [rows, setRows] = useState<SubmissionRow[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { status } = usePasskeySession({ moduleId: 'm3_database' });
+  const [rows, setRows] = useState<SubmissionRow[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      void loadData()
-    }
-  }, [status])
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
-  async function loadData() {
-    setLoading(true)
-    setError(null)
-    const { data, error } = await supabase
-      .from('module_submissions')
-      .select('id, module_name, submission_data, created_at')
-      .order('created_at', { ascending: false })
-    if (error) setError(error.message)
-    else setRows(data ?? [])
-    setLoading(false)
-  }
+  const loadData = useCallback(async () => {
+    if (!mountedRef.current || status !== 'authenticated') return;
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await listModuleSubmissions();
+      if (mountedRef.current) {
+        setRows(data);
+      }
+    } catch (err) {
+      console.error('[3Database] Failed to load submissions', err);
+      if (mountedRef.current) {
+        setError('Tidak dapat memuat data lokal');
+      }
+    } finally {
+      if (mountedRef.current) {
+        setLoading(false);
+      }
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (status !== 'authenticated') {
+      setRows([]);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
+    void loadData();
+    const unsubscribe = subscribeToLocalData(() => {
+      void loadData();
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [status, loadData]);
 
   const summary = useMemo(() => {
-    const counts = new Map<string, number>()
+    const counts = new Map<string, number>();
     for (const row of rows) {
-      counts.set(row.module_name, (counts.get(row.module_name) ?? 0) + 1)
+      counts.set(row.module_name, (counts.get(row.module_name) ?? 0) + 1);
     }
-    return Array.from(counts.entries()).map(([module, total]) => ({ module, total }))
-  }, [rows])
+    return Array.from(counts.entries()).map(([module, total]) => ({ module, total }));
+  }, [rows]);
 
   if (status === 'checking') {
     return (
       <div className="app-shell flex items-center justify-center">
-        <p className="text-neutral-400">Memeriksa sesi...</p>
+        <p className="text-neutral-400">Menyiapkan modul...</p>
       </div>
-    )
-  }
-
-  if (status !== 'authenticated') {
-    return (
-      <div className="app-shell flex items-center justify-center">
-        <div className="w-full max-w-sm space-y-4 rounded-xl border border-neutral-700 bg-neutral-900/80 p-6">
-          <h1 className="text-xl font-semibold text-white">Masuk Modul DATABASE</h1>
-          <p className="text-sm text-neutral-400">Analisis ringkas semua modul membutuhkan passkey.</p>
-          <form
-            className="space-y-3"
-            onSubmit={async (event) => {
-              event.preventDefault()
-              await signIn(passkey)
-            }}
-          >
-            <input
-              type="password"
-              className="w-full rounded-md border border-neutral-600 bg-neutral-800 px-3 py-2 text-white"
-              placeholder="Passkey"
-              value={passkey}
-              onChange={(event) => setPasskey(event.target.value)}
-            />
-            <button
-              type="submit"
-              className="w-full rounded-md bg-violet-500 py-2 text-sm font-semibold text-white hover:bg-violet-400"
-            >
-              Masuk
-            </button>
-          </form>
-          {authError && <p className="text-sm text-red-400">{authError}</p>}
-        </div>
-      </div>
-    )
+    );
   }
 
   return (
     <div className="app-shell px-6 py-10 text-neutral-100">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
-        <header className="flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold">DATABASE</h1>
-            <p className="text-sm text-neutral-400">Ikhtisar semua data modul.</p>
-            <p className="text-sm text-neutral-500 mt-1">Total entri: {rows.length}</p>
-          </div>
-          <div className="flex items-center gap-3">
+        <header className="flex flex-col gap-1">
+          <h1 className="text-3xl font-semibold">DATABASE</h1>
+          <p className="text-sm text-neutral-400">Ikhtisar semua data modul.</p>
+          <p className="text-xs text-neutral-500">Total entri: {rows.length}</p>
+        </header>
+
+        <section className="rounded-xl border border-neutral-700 bg-neutral-900/60 p-6">
+          <div className="flex items-start justify-between">
+            <h2 className="text-lg font-medium text-white">Ringkasan per Modul</h2>
             <button
-              onClick={() => loadData()}
+              onClick={() => void loadData()}
               className="rounded-md border border-neutral-600 px-3 py-1 text-sm hover:bg-neutral-800"
               disabled={loading}
             >
               {loading ? 'Memuat...' : 'Refresh'}
             </button>
-            <button
-              onClick={() => signOut()}
-              className="rounded-md border border-neutral-600 px-3 py-1 text-sm hover:bg-neutral-800"
-            >
-              Keluar
-            </button>
           </div>
-        </header>
-
-        <section className="rounded-xl border border-neutral-700 bg-neutral-900/60 p-6">
-          <h2 className="text-lg font-medium text-white">Ringkasan per Modul</h2>
           {summary.length === 0 ? (
             <p className="mt-3 text-sm text-neutral-500">Belum ada data tersimpan.</p>
           ) : (
@@ -160,6 +144,5 @@ export default function App() {
         </section>
       </div>
     </div>
-  )
+  );
 }
-

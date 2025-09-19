@@ -1,131 +1,92 @@
-import { useCallback, useEffect, useState } from 'react'
-import type { SupabaseClient, Session } from '@supabase/supabase-js'
-import { signOut as supabaseSignOut, signInWithPasskey } from '../auth/passkey'
+﻿import { useCallback, useEffect, useState } from 'react';
+import {
+  getActiveSession,
+  signInWithPasskey,
+  signOut,
+  subscribeToSessionChanges,
+  type Session
+} from '../auth/passkey';
 
-type Status = 'checking' | 'authenticated' | 'unauthenticated'
+type Status = 'checking' | 'authenticated' | 'unauthenticated';
 
 type PasskeyState = {
-  status: Status
-  session: Session | null
-  error: string | null
-  signIn: (passkey: string) => Promise<void>
-  signOut: () => Promise<void>
-}
+  status: Status;
+  session: Session | null;
+  error: string | null;
+  signIn: (passkey: string) => Promise<void>;
+  signOut: () => Promise<void>;
+};
 
 type Options = {
-  moduleId?: string
-}
+  moduleId?: string;
+  requirePasskey?: boolean;
+};
 
 function translateValidationError(message: string | null | undefined): string {
-  if (!message) return 'Gagal memverifikasi passkey'
-  const normalized = message.toLowerCase()
-  if (normalized.includes('module not configured')) return 'Modul belum dikonfigurasi untuk passkey'
-  if (normalized.includes('invalid passkey')) return 'Passkey tidak sesuai untuk modul ini'
-  if (normalized.includes('passkey is required')) return 'Passkey tidak boleh kosong'
-  return message
+  if (!message) return 'Gagal memverifikasi passkey';
+  return message;
 }
 
-export function usePasskeySession(client: SupabaseClient, options: Options = {}): PasskeyState {
-  const [status, setStatus] = useState<Status>('checking')
-  const [session, setSession] = useState<Session | null>(null)
-  const [error, setError] = useState<string | null>(null)
+export function usePasskeySession(options: Options = {}): PasskeyState {
+  const { moduleId, requirePasskey = false } = options;
+  const [status, setStatus] = useState<Status>('checking');
+  const [session, setSession] = useState<Session | null>(() => getActiveSession(moduleId));
+  const [error, setError] = useState<string | null>(null);
+  const autoPasskey = requirePasskey ? null : `auto-${moduleId ?? 'global'}`;
 
   useEffect(() => {
-    let active = true
-    client.auth.getSession().then(({ data, error }) => {
-      if (!active) return
-      if (error) {
-        console.error('[passkey] Failed to get session:', error)
-        setStatus('unauthenticated')
-        setSession(null)
-        setError(error.message)
-      } else {
-        setSession(data.session ?? null)
-        setStatus(data.session ? 'authenticated' : 'unauthenticated')
-        setError(null)
-      }
-    })
+    let active = true;
 
-    const { data: subscription } = client.auth.onAuthStateChange((event, currentSession) => {
-      if (!active) return
-      if (event === 'SIGNED_OUT') {
-        setStatus('unauthenticated')
-        setSession(null)
-        setError(null)
-      } else {
-        setSession(currentSession ?? null)
-        setStatus(currentSession ? 'authenticated' : 'unauthenticated')
-        setError(null)
+    async function ensureSession() {
+      let current = getActiveSession(moduleId);
+      if (!current && !requirePasskey && autoPasskey) {
+        const result = await signInWithPasskey(autoPasskey, moduleId);
+        current = result.session ?? null;
       }
-    })
+      if (!active) return;
+      setSession(current);
+      setStatus(current ? 'authenticated' : 'unauthenticated');
+      if (!current) {
+        setError(null);
+      }
+    }
+
+    void ensureSession();
+
+    const unsubscribe = subscribeToSessionChanges(() => {
+      void ensureSession();
+    }, moduleId);
 
     return () => {
-      active = false
-      subscription.subscription.unsubscribe()
-    }
-  }, [client])
+      active = false;
+      unsubscribe();
+    };
+  }, [moduleId, requirePasskey, autoPasskey]);
 
-  const signIn = useCallback(async (passkey: string) => {
-    setStatus('checking')
-    setError(null)
-    const trimmed = passkey.trim()
-    if (!trimmed) {
-      setError('Passkey tidak boleh kosong')
-      setStatus('unauthenticated')
-      setSession(null)
-      return
-    }
+  const signInHandler = useCallback(async (passkey: string) => {
+    setStatus('checking');
+    setError(null);
 
-    if (options.moduleId) {
-      try {
-        const { error: validationError, data: validationData } = await client.functions.invoke('module-passkey', {
-          body: {
-            moduleId: options.moduleId,
-            passkey: trimmed
-          }
-        })
-
-        if (validationError) {
-          console.error('[passkey] Validation failed:', validationError)
-          setError(translateValidationError(validationError.message))
-          setStatus('unauthenticated')
-          setSession(null)
-          return
-        }
-
-        if (!validationData?.valid) {
-          setError('Passkey tidak sesuai untuk modul ini')
-          setStatus('unauthenticated')
-          setSession(null)
-          return
-        }
-      } catch (invokeError) {
-        console.error('[passkey] Validation request failed:', invokeError)
-        setError('Tidak dapat memverifikasi passkey, coba lagi')
-        setStatus('unauthenticated')
-        setSession(null)
-        return
-      }
+    const result = await signInWithPasskey(passkey, moduleId);
+    if (!result.session || result.error) {
+      setStatus('unauthenticated');
+      setSession(null);
+      setError(translateValidationError(result.error));
+      return;
     }
 
-    const result = await signInWithPasskey(client, trimmed)
-    if (result.error) {
-      console.error('[passkey] Login failed:', result.error)
-      setError(result.error)
-      setStatus('unauthenticated')
-      setSession(null)
-      return
-    }
-    setSession(result.session ?? null)
-    setStatus(result.session ? 'authenticated' : 'unauthenticated')
-  }, [client, options.moduleId])
+    setSession(result.session);
+    setStatus('authenticated');
+  }, [moduleId]);
 
-  const signOut = useCallback(async () => {
-    await supabaseSignOut(client)
-    setStatus('unauthenticated')
-    setSession(null)
-    setError(null)
-  }, [client])
+  const signOutHandler = useCallback(async () => {
+    await signOut(moduleId);
+    setSession(null);
+    setStatus(requirePasskey ? 'unauthenticated' : 'checking');
+    setError(null);
+  }, [moduleId, requirePasskey]);
 
-  return { status, session, error, signIn, signOut }
+  return { status, session, error, signIn: signInHandler, signOut: signOutHandler };
 }
+
+export type { Session } from '../auth/passkey';

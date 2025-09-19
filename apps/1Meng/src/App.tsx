@@ -1,148 +1,107 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { supabase } from './services/supabaseClient'
-import { usePasskeySession } from '@shared/hooks/usePasskeySession'
+﻿import React, { useEffect, useMemo, useState } from 'react';
+import { usePasskeySession } from '@shared/hooks/usePasskeySession';
+import {
+  insertModuleSubmission,
+  listModuleSubmissions,
+  type ModuleSubmissionRecord
+} from '@shared/storage/localData';
 
-const MODULE_NAME = '1Meng'
+const MODULE_NAME = '1Meng';
 
-type SubmissionRow = {
-  id: string
-  submission_data: {
-    title?: string
-    amount?: number
-    note?: string
-  }
-  created_at: string
-}
+type SubmissionRow = ModuleSubmissionRecord;
 
-const initialForm = {
+type FormState = {
+  title: string;
+  amount: string;
+  note: string;
+};
+
+const initialForm: FormState = {
   title: '',
   amount: '',
-  note: '',
-}
+  note: ''
+};
 
 export default function App() {
-  const { status, session, error: authError, signIn, signOut } = usePasskeySession(supabase, { moduleId: 'm1_meng' })
-  const [passkey, setPasskey] = useState('')
-  const [form, setForm] = useState(initialForm)
-  const [submissions, setSubmissions] = useState<SubmissionRow[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [message, setMessage] = useState<string | null>(null)
+  const { status, session } = usePasskeySession({ moduleId: 'm1_meng' });
+  const [form, setForm] = useState(initialForm);
+  const [submissions, setSubmissions] = useState<SubmissionRow[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      void loadSubmissions()
+    if (status === 'authenticated' && session) {
+      void loadSubmissions();
     }
-  }, [status])
+  }, [status, session]);
 
   async function loadSubmissions() {
-    setLoading(true)
-    setError(null)
-    const { data, error } = await supabase
-      .from('module_submissions')
-      .select('id, submission_data, created_at')
-      .eq('module_name', MODULE_NAME)
-      .order('created_at', { ascending: false })
-    if (error) {
-      setError(error.message)
-    } else {
-      setSubmissions(data ?? [])
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await listModuleSubmissions({ moduleName: MODULE_NAME });
+      setSubmissions(data);
+    } catch (err) {
+      console.error('[1Meng] Failed to load submissions', err);
+      setError('Tidak dapat memuat data lokal');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false)
   }
 
   async function handleSubmit(event: React.FormEvent) {
-    event.preventDefault()
-    if (!session) return
-    const amountValue = Number(form.amount)
+    event.preventDefault();
+    if (!session) return;
+    const amountValue = Number(form.amount);
     if (Number.isNaN(amountValue) || amountValue <= 0) {
-      setError('Nominal harus angka positif')
-      return
+      setError('Nominal harus angka positif');
+      return;
     }
-    setLoading(true)
-    setError(null)
-    setMessage(null)
-    const payload = {
-      user_id: session.user.id,
-      module_name: MODULE_NAME,
-      submission_data: {
-        title: form.title,
-        amount: amountValue,
-        note: form.note,
-      },
-      submission_status: 'pending',
+    setLoading(true);
+    setError(null);
+    setMessage(null);
+    try {
+      await insertModuleSubmission({
+        user_id: session.user.id,
+        module_name: MODULE_NAME,
+        submission_data: {
+          title: form.title,
+          amount: amountValue,
+          note: form.note
+        },
+        submission_status: 'pending'
+      });
+      setForm(initialForm);
+      setMessage('Pengajuan berhasil disimpan');
+      await loadSubmissions();
+    } catch (err) {
+      console.error('[1Meng] Failed to save submission', err);
+      setError('Gagal menyimpan catatan');
+    } finally {
+      setLoading(false);
     }
-    const { error } = await supabase.from('module_submissions').insert(payload)
-    if (error) {
-      setError(error.message)
-    } else {
-      setForm(initialForm)
-      setMessage('Pengajuan berhasil disimpan')
-      await loadSubmissions()
-    }
-    setLoading(false)
   }
 
   const totalSpent = useMemo(() => {
-    return submissions.reduce((sum, row) => sum + (row.submission_data.amount ?? 0), 0)
-  }, [submissions])
+    return submissions.reduce((sum, row) => sum + (Number(row.submission_data.amount) || 0), 0);
+  }, [submissions]);
 
-  if (status === 'checking') {
+  if (status === 'checking' || !session) {
     return (
       <div className="app-shell flex items-center justify-center">
-        <p className="text-neutral-400">Memeriksa sesi...</p>
+        <p className="text-neutral-400">Menyiapkan modul...</p>
       </div>
-    )
-  }
-
-  if (status !== 'authenticated') {
-    return (
-      <div className="app-shell flex items-center justify-center">
-        <div className="w-full max-w-sm space-y-4 rounded-xl border border-neutral-700 bg-neutral-900/80 p-6">
-          <h1 className="text-xl font-semibold text-white">Masuk Modul 1MENG</h1>
-          <p className="text-sm text-neutral-400">Gunakan passkey untuk mencatat pemasukan/pengeluaran.</p>
-          <form
-            className="space-y-3"
-            onSubmit={async (event) => {
-              event.preventDefault()
-              await signIn(passkey)
-            }}
-          >
-            <input
-              type="password"
-              className="w-full rounded-md border border-neutral-600 bg-neutral-800 px-3 py-2 text-white"
-              placeholder="Passkey"
-              value={passkey}
-              onChange={(event) => setPasskey(event.target.value)}
-            />
-            <button
-              type="submit"
-              className="w-full rounded-md bg-emerald-500 py-2 text-sm font-semibold text-white hover:bg-emerald-400"
-            >
-              Masuk
-            </button>
-          </form>
-          {authError && <p className="text-sm text-red-400">{authError}</p>}
-        </div>
-      </div>
-    )
+    );
   }
 
   return (
     <div className="app-shell px-6 py-10 text-neutral-100">
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
-        <header className="flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold">1MENG</h1>
-            <p className="text-sm text-neutral-400">Catat pemasukan harian dengan cepat.</p>
-            <p className="text-sm text-neutral-500 mt-1">Total tercatat: Rp {totalSpent.toLocaleString('id-ID')}</p>
-          </div>
-          <button
-            onClick={() => signOut()}
-            className="rounded-md border border-neutral-600 px-3 py-1 text-sm hover:bg-neutral-800"
-          >
-            Keluar
-          </button>
+        <header className="flex flex-col gap-1">
+          <h1 className="text-3xl font-semibold">1MENG</h1>
+          <p className="text-sm text-neutral-400">Catat pemasukan harian dengan cepat.</p>
+          <p className="text-xs text-neutral-500">Total tercatat: Rp {totalSpent.toLocaleString('id-ID')}</p>
         </header>
 
         <section className="rounded-xl border border-neutral-700 bg-neutral-900/60 p-6">
@@ -202,9 +161,9 @@ export default function App() {
                     <span>{new Date(item.created_at).toLocaleString('id-ID')}</span>
                   </div>
                   <div className="mt-2 flex items-center justify-between text-sm">
-                    <span>Rp {(item.submission_data.amount ?? 0).toLocaleString('id-ID')}</span>
+                    <span>Rp {(Number(item.submission_data.amount) || 0).toLocaleString('id-ID')}</span>
                     {item.submission_data.note && (
-                      <span className="text-neutral-400">{item.submission_data.note}</span>
+                      <span className="text-neutral-400">{item.submission_data.note as string}</span>
                     )}
                   </div>
                 </li>
@@ -214,7 +173,5 @@ export default function App() {
         </section>
       </div>
     </div>
-  )
+  );
 }
-
-
