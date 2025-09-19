@@ -1,4 +1,4 @@
-﻿const SESSION_PREFIX = 'yuzha:passkey-session:';
+const SESSION_PREFIX = 'yuzha:passkey-session:';
 const SESSION_EVENT = 'yuzha:passkey-session:changed';
 
 type SessionEventDetail = {
@@ -129,9 +129,9 @@ export function subscribeToSessionChanges(listener: () => void, moduleId?: strin
       listener();
     }
   };
-  window.addEventListener(SESSION_EVENT, handler as EventListener);
+  window.addEventListener(SESSION_EVENT, handler);
   return () => {
-    window.removeEventListener(SESSION_EVENT, handler as EventListener);
+    window.removeEventListener(SESSION_EVENT, handler);
   };
 }
 
@@ -145,3 +145,4 @@ export function clearAllSessions(): void {
     writeRawSession(null, key.replace(SESSION_PREFIX, '') || undefined);
   }
 }
+
