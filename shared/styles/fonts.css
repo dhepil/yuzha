@@ -8,6 +8,8 @@
 
 :root {
   font-family: "taimingda", "Inter", system-ui, sans-serif;
+  letter-spacing: 0.8px; /* jarak antar huruf */
+  line-height: 1.5; /* tinggi baris */
 }
 
 body {
