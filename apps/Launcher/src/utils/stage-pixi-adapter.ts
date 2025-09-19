@@ -1,3 +1,6 @@
+import type {
+  PointerEvent as ReactPointerEvent,
+} from 'react';
 /**
  * Pixi.js Stage Adapter
  * Integrates Stage Transform system with Pixi.js applications
@@ -130,7 +133,7 @@ export function useStageCoordinates(transformManager: StageTransformManager) {
     /**
      * Transform React pointer event to stage coordinates
      */
-    transformPointerEvent: (event: React.PointerEvent<HTMLElement>) => {
+    transformPointerEvent: (event: ReactPointerEvent<HTMLElement>) => {
       return transformManager.transformEventCoordinates(event.nativeEvent)
     },
 
@@ -147,3 +150,5 @@ export function useStageCoordinates(transformManager: StageTransformManager) {
     }
   }
 }
+
+

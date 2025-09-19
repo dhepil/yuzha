@@ -1,5 +1,4 @@
 import type { Application } from 'pixi.js'
-import { ColorMatrixFilter } from 'pixi.js'
 import type { BuiltLayer } from './LogicTypes'
 import type { LayerConfig } from './sceneTypes'
 
@@ -159,3 +158,4 @@ export function buildEffects(app: Application, built: BuiltLayer[]) {
 
   return { items, tick, cleanup }
 }
+

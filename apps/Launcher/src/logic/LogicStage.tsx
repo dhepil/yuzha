@@ -1,5 +1,4 @@
 import React from 'react'
-import { Application } from 'pixi.js'
 import { PixiStageAdapter } from '../utils/stage-pixi-adapter'
 import { buildSceneFromLogic } from './logicLoader'
 import type { LogicConfig } from './sceneTypes'
@@ -51,4 +50,5 @@ export default function LogicStage() {
     <div ref={ref} />
   )
 }
+
 

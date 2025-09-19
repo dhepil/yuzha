@@ -1,4 +1,5 @@
-import { Application, Container } from 'pixi.js'
+import { Application } from 'pixi.js'
+import type { Container } from 'pixi.js'
 import type { LogicConfig } from './sceneTypes'
 import { buildSceneFromLogic } from './logicLoader'
 
@@ -34,9 +35,7 @@ export async function mountPixi(
     const scene = await buildSceneFromLogic(app, cfg)
     sceneContainer = scene.container
     app.stage.addChild(sceneContainer)
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error('[LogicRendererPixi] Failed to mount scene', e)
+  } catch (e) {    console.error('[LogicRendererPixi] Failed to mount scene', e)
   }
 
   return {
@@ -57,4 +56,6 @@ export async function mountPixi(
     }
   }
 }
+
+
 

@@ -41,3 +41,10 @@ supabase/*SECRET*.md
 .docs/
 .vscode/
 supabase/modulePasswords.json
+
+.env.local
+env.local
+
+
+.eslintcache
+

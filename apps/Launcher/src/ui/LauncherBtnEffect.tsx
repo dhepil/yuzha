@@ -1,4 +1,4 @@
-import React from 'react'
+import type { CSSProperties } from 'react'
 
 /**
  * LauncherBtnEffect
@@ -29,9 +29,9 @@ export type LauncherBtnEffectState = {
 /** Keluaran visual untuk dipakai di <LauncherBtn /> */
 export type LauncherBtnVisual = {
   panelClass: string
-  panelStyle?: React.CSSProperties
+  panelStyle?: CSSProperties
   buttonClass: string
-  buttonStyle?: React.CSSProperties
+  buttonStyle?: CSSProperties
   badgeClass: string
 }
 
@@ -99,3 +99,5 @@ export function useLauncherBtnEffect(
     badgeClass: baseBadge
   }
 }
+
+

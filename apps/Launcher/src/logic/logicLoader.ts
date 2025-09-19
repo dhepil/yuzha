@@ -26,10 +26,6 @@ function getUrlForImageRef(cfg: LogicConfig, ref: LayerConfig['imageRef']): stri
   return url ?? null
 }
 
-function toRad(deg?: number): number { return ((deg ?? 0) * Math.PI) / 180 }
-function toDeg(rad: number): number { return (rad * 180) / Math.PI }
-function clamp01(n: number): number { return Math.max(0, Math.min(1, n)) }
-
 // z-index and base transforms are delegated to Basic processor helpers
 
 export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): Promise<BuildResult> {
@@ -145,3 +141,4 @@ export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): P
 
   return { container, layers: built }
 }
+

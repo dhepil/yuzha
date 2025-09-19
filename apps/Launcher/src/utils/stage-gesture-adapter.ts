@@ -3,8 +3,9 @@
  * Enhances existing gesture handling with coordinate transformation
  */
 
-import React from 'react'
-import { StageTransformManager } from './stage-transform'
+import { useState, useCallback, useRef, useEffect, createElement } from 'react'
+import type { PointerEvent as ReactPointerEvent, HTMLAttributes, CSSProperties, ReactNode } from 'react'
+import type { StageTransformManager } from './stage-transform'
 
 export interface StageGestureOptions {
   /** Coordinate transformer manager */
@@ -20,7 +21,7 @@ export interface StageGestureResult {
   setOpen: (v: boolean) => void
   toggle: () => void
   /** Enhanced binding function with coordinate transformation */
-  bindTargetProps: () => React.HTMLAttributes<HTMLElement>
+  bindTargetProps: () => HTMLAttributes<HTMLElement>
 }
 
 type PressState = {
@@ -44,10 +45,10 @@ export function useStageGesture(opts?: StageGestureOptions): StageGestureResult 
   const tol = Math.max(2, Math.floor(opts?.moveTolerancePx ?? 8))
   const transformManager = opts?.transformManager
 
-  const [open, setOpen] = React.useState(false)
-  const toggle = React.useCallback(() => setOpen(v => !v), [])
+  const [open, setOpen] = useState(false)
+  const toggle = useCallback(() => setOpen(v => !v), [])
 
-  const pressRef = React.useRef<PressState>({
+  const pressRef = useRef<PressState>({
     active: false,
     id: null,
     startX: 0,
@@ -59,7 +60,7 @@ export function useStageGesture(opts?: StageGestureOptions): StageGestureResult 
     stageStartY: 0
   })
 
-  const clearTimer = React.useCallback(() => {
+  const clearTimer = useCallback(() => {
     const p = pressRef.current
     if (p.timer !== null) {
       window.clearTimeout(p.timer)
@@ -67,7 +68,7 @@ export function useStageGesture(opts?: StageGestureOptions): StageGestureResult 
     }
   }, [])
 
-  const onPointerDown = React.useCallback((e: React.PointerEvent<HTMLElement>) => {
+  const onPointerDown = useCallback((e: ReactPointerEvent<HTMLElement>) => {
     if (!e.isPrimary) return
     ;(e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId)
 
@@ -97,7 +98,7 @@ export function useStageGesture(opts?: StageGestureOptions): StageGestureResult 
     }, holdMs)
   }, [clearTimer, holdMs, toggle, transformManager])
 
-  const onPointerMove = React.useCallback((e: React.PointerEvent<HTMLElement>) => {
+  const onPointerMove = useCallback((e: ReactPointerEvent<HTMLElement>) => {
     const p = pressRef.current
     if (!p.active || p.id !== e.pointerId) return
 
@@ -128,7 +129,7 @@ export function useStageGesture(opts?: StageGestureOptions): StageGestureResult 
     }
   }, [clearTimer, tol, transformManager])
 
-  const endPress = React.useCallback((e: React.PointerEvent<HTMLElement>) => {
+  const endPress = useCallback((e: ReactPointerEvent<HTMLElement>) => {
     const p = pressRef.current
     if (!p.active || (p.id !== null && p.id !== e.pointerId)) return
     p.active = false
@@ -137,7 +138,7 @@ export function useStageGesture(opts?: StageGestureOptions): StageGestureResult 
     try { (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId) } catch {}
   }, [clearTimer])
 
-  const bindTargetProps = React.useCallback((): React.HTMLAttributes<HTMLElement> => {
+  const bindTargetProps = useCallback((): HTMLAttributes<HTMLElement> => {
     return {
       onPointerDown,
       onPointerMove,
@@ -167,9 +168,9 @@ export interface StageGestureAreaProps {
   /** Overlay class name */
   className?: string
   /** Overlay style */
-  style?: React.CSSProperties
+  style?: CSSProperties
   /** Child content */
-  children?: React.ReactNode | ((state: { open: boolean; toggle: () => void }) => React.ReactNode)
+  children?: ReactNode | ((state: { open: boolean; toggle: () => void }) => ReactNode)
 }
 
 export function StageGestureArea(props: StageGestureAreaProps) {
@@ -178,11 +179,11 @@ export function StageGestureArea(props: StageGestureAreaProps) {
     transformManager: props.transformManager
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     props.onOpenChange?.(gesture.open)
   }, [gesture.open, props])
 
-  return React.createElement(
+  return createElement(
     'div',
     {
       ...gesture.bindTargetProps(),
@@ -194,3 +195,5 @@ export function StageGestureArea(props: StageGestureAreaProps) {
       : props.children
   )
 }
+
+

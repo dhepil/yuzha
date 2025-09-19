@@ -1,6 +1,5 @@
 import type { LogicConfig } from './sceneTypes'
 // Temporary shim: expose config from original location under the new logic/ path
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - JSON import without type
 import rawConfig from './LogicConfig.json'
 
@@ -38,3 +37,4 @@ function remapRegistry(cfg: LogicConfig): LogicConfig {
 const config = remapRegistry(rawConfig as LogicConfig)
 
 export default config
+
