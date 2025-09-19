@@ -1,5 +1,5 @@
-﻿const STORAGE_KEY = 'yuzha:local-data';
-const CHANGE_EVENT = 'yuzha:local-data:changed';
+﻿const STORAGE_KEY = "yuzha:local-data";
+const CHANGE_EVENT = "yuzha:local-data:changed";
 
 export type ModuleSubmissionRecord = {
   id: string;
@@ -30,7 +30,7 @@ let memoryStore: DataStore = {
 };
 
 function deepClone<T>(value: T): T {
-  if (typeof globalThis.structuredClone === 'function') {
+  if (typeof globalThis.structuredClone === "function") {
     return globalThis.structuredClone(value);
   }
   return JSON.parse(JSON.stringify(value));
@@ -38,7 +38,7 @@ function deepClone<T>(value: T): T {
 
 function safeLocalStorage(): Storage | null {
   try {
-    if (typeof window === 'undefined') return null;
+    if (typeof window === "undefined") return null;
     return window.localStorage;
   } catch {
     return null;
@@ -47,29 +47,29 @@ function safeLocalStorage(): Storage | null {
 
 function normaliseModuleSubmission(entry: any): ModuleSubmissionRecord {
   return {
-    id: String(entry?.id ?? ''),
-    user_id: String(entry?.user_id ?? ''),
-    module_name: String(entry?.module_name ?? ''),
-    submission_data: typeof entry?.submission_data === 'object' && entry?.submission_data !== null
+    id: String(entry?.id ?? ""),
+    user_id: String(entry?.user_id ?? ""),
+    module_name: String(entry?.module_name ?? ""),
+    submission_data: typeof entry?.submission_data === "object" && entry?.submission_data !== null
       ? deepClone(entry.submission_data as Record<string, unknown>)
       : {},
     submission_status: entry?.submission_status !== undefined && entry?.submission_status !== null
       ? String(entry.submission_status)
       : undefined,
-    created_at: typeof entry?.created_at === 'string' ? entry.created_at : new Date().toISOString()
+    created_at: typeof entry?.created_at === "string" ? entry.created_at : new Date().toISOString()
   };
 }
 
 function normaliseUserConfig(entry: any): UserConfigRecord {
   return {
-    id: String(entry?.id ?? ''),
-    user_id: String(entry?.user_id ?? ''),
-    profile_name: String(entry?.profile_name ?? ''),
-    config_type: String(entry?.config_type ?? ''),
-    config_data: typeof entry?.config_data === 'object' && entry?.config_data !== null
+    id: String(entry?.id ?? ""),
+    user_id: String(entry?.user_id ?? ""),
+    profile_name: String(entry?.profile_name ?? ""),
+    config_type: String(entry?.config_type ?? ""),
+    config_data: typeof entry?.config_data === "object" && entry?.config_data !== null
       ? deepClone(entry.config_data as Record<string, unknown>)
       : {},
-    updated_at: typeof entry?.updated_at === 'string' ? entry.updated_at : new Date().toISOString()
+    updated_at: typeof entry?.updated_at === "string" ? entry.updated_at : new Date().toISOString()
   };
 }
 
@@ -110,13 +110,13 @@ function writeStore(store: DataStore): void {
 }
 
 function notifyChange(): void {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent(CHANGE_EVENT));
   }
 }
 
 function generateId(): string {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
     return crypto.randomUUID();
   }
   return `local-${Math.random().toString(36).slice(2)}-${Date.now().toString(36)}`;
@@ -179,8 +179,9 @@ export async function upsertUserConfig(entry: {
       row.profile_name === entry.profile_name &&
       row.config_type === entry.config_type
   );
+  const existing = existingIndex >= 0 ? store.user_configs[existingIndex] : undefined;
   const record: UserConfigRecord = {
-    id: existingIndex >= 0 ? store.user_configs[existingIndex].id : generateId(),
+    id: existing?.id ?? generateId(),
     user_id: entry.user_id,
     profile_name: entry.profile_name,
     config_type: entry.config_type,
@@ -197,7 +198,7 @@ export async function upsertUserConfig(entry: {
 }
 
 export function subscribeToLocalData(listener: () => void): () => void {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return () => {};
   }
   const handler = () => listener();
@@ -206,10 +207,10 @@ export function subscribeToLocalData(listener: () => void): () => void {
     if (event.key && event.key !== STORAGE_KEY) return;
     listener();
   };
-  window.addEventListener('storage', storageHandler);
+  window.addEventListener("storage", storageHandler);
   return () => {
     window.removeEventListener(CHANGE_EVENT, handler);
-    window.removeEventListener('storage', storageHandler);
+    window.removeEventListener("storage", storageHandler);
   };
 }
 

@@ -1,3 +1,9 @@
+import type {
+  PointerEvent as ReactPointerEvent,
+  MouseEvent as ReactMouseEvent,
+  TouchEvent as ReactTouchEvent,
+} from 'react';
+
 /**
  * Stage Transform Utilities
  * Handles 1024×1024 stage scaling and coordinate transformation
@@ -153,8 +159,10 @@ export class StageTransformManager {
     
     if ('touches' in event && event.touches.length > 0) {
       // Touch event
-      clientX = event.touches[0].clientX
-      clientY = event.touches[0].clientY
+      const firstTouch = event.touches.item(0)
+      if (!firstTouch) return null
+      clientX = firstTouch.clientX
+      clientY = firstTouch.clientY
     } else if ('clientX' in event) {
       // Mouse or pointer event
       clientX = event.clientX
@@ -226,22 +234,23 @@ export function createCoordinateTransformer(manager: StageTransformManager) {
     /**
      * Transform pointer event coordinates to stage coordinates
      */
-    transformPointerEvent: (event: React.PointerEvent<HTMLElement>): StageCoordinates | null => {
+    transformPointerEvent: (event: ReactPointerEvent<HTMLElement>): StageCoordinates | null => {
       return manager.transformEventCoordinates(event.nativeEvent)
     },
     
     /**
      * Transform mouse event coordinates to stage coordinates
      */
-    transformMouseEvent: (event: React.MouseEvent<HTMLElement>): StageCoordinates | null => {
+    transformMouseEvent: (event: ReactMouseEvent<HTMLElement>): StageCoordinates | null => {
       return manager.transformEventCoordinates(event.nativeEvent)
     },
     
     /**
      * Transform touch event coordinates to stage coordinates
      */
-    transformTouchEvent: (event: React.TouchEvent<HTMLElement>): StageCoordinates | null => {
+    transformTouchEvent: (event: ReactTouchEvent<HTMLElement>): StageCoordinates | null => {
       return manager.transformEventCoordinates(event.nativeEvent)
     }
   }
 }
+

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePasskeySession } from '@shared/hooks/usePasskeySession';
 import {
   deleteModuleSubmission,
@@ -152,24 +152,28 @@ export default function App() {
             <p className="mt-3 text-sm text-neutral-500">Belum ada catatan.</p>
           ) : (
             <ul className="mt-3 space-y-3 text-sm text-neutral-300">
-              {items.map((item) => (
-                <li key={item.id} className="rounded-md border border-neutral-700 bg-neutral-900/60 p-3">
-                  <div className="flex items-center justify-between text-xs text-neutral-500">
-                    <span>{new Date(item.created_at).toLocaleString('id-ID')}</span>
-                    <button
-                      onClick={() => removeItem(item.id)}
-                      className="text-xs text-red-300 hover:text-red-200"
-                      disabled={loading}
-                    >
-                      Hapus
-                    </button>
-                  </div>
-                  <h3 className="mt-1 text-sm font-semibold text-neutral-100">{(item.submission_data.title as string) || 'Tanpa Judul'}</h3>
-                  {item.submission_data.description && (
-                    <p className="mt-1 text-sm text-neutral-400">{item.submission_data.description as string}</p>
-                  )}
-                </li>
-              ))}
+              {items.map((item) => {
+                const title = typeof item.submission_data.title === 'string' ? item.submission_data.title : 'Tanpa Judul';
+                const description = typeof item.submission_data.description === 'string' ? item.submission_data.description : null;
+                return (
+                  <li key={item.id} className="rounded-md border border-neutral-700 bg-neutral-900/60 p-3">
+                    <div className="flex items-center justify-between text-xs text-neutral-500">
+                      <span>{new Date(item.created_at).toLocaleString('id-ID')}</span>
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        className="text-xs text-red-300 hover:text-red-200"
+                        disabled={loading}
+                      >
+                        Hapus
+                      </button>
+                    </div>
+                    <h3 className="mt-1 text-sm font-semibold text-neutral-100">{title}</h3>
+                    {description && (
+                      <p className="mt-1 text-sm text-neutral-400">{description}</p>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           )}
           {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
@@ -178,3 +182,4 @@ export default function App() {
     </div>
   );
 }
+

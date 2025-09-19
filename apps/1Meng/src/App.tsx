@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { usePasskeySession } from '@shared/hooks/usePasskeySession';
 import {
   insertModuleSubmission,
@@ -154,20 +154,25 @@ export default function App() {
             <p className="mt-3 text-sm text-neutral-500">Belum ada catatan.</p>
           ) : (
             <ul className="mt-3 space-y-3 text-sm text-neutral-300">
-              {submissions.map((item) => (
-                <li key={item.id} className="rounded-md border border-neutral-700 bg-neutral-900/60 p-3">
-                  <div className="flex items-center justify-between text-xs text-neutral-500">
-                    <span>{item.submission_data.title || 'Tanpa Judul'}</span>
-                    <span>{new Date(item.created_at).toLocaleString('id-ID')}</span>
-                  </div>
-                  <div className="mt-2 flex items-center justify-between text-sm">
-                    <span>Rp {(Number(item.submission_data.amount) || 0).toLocaleString('id-ID')}</span>
-                    {item.submission_data.note && (
-                      <span className="text-neutral-400">{item.submission_data.note as string}</span>
-                    )}
-                  </div>
-                </li>
-              ))}
+              {submissions.map((item) => {
+                const title = typeof item.submission_data.title === 'string' ? item.submission_data.title : 'Tanpa Judul';
+                const amountValue = typeof item.submission_data.amount === 'number' ? item.submission_data.amount : Number(item.submission_data.amount) || 0;
+                const note = typeof item.submission_data.note === 'string' ? item.submission_data.note : null;
+                return (
+                  <li key={item.id} className="rounded-md border border-neutral-700 bg-neutral-900/60 p-3">
+                    <div className="flex items-center justify-between text-xs text-neutral-500">
+                      <span>{title}</span>
+                      <span>{new Date(item.created_at).toLocaleString('id-ID')}</span>
+                    </div>
+                    <div className="mt-2 flex items-center justify-between text-sm">
+                      <span>Rp {amountValue.toLocaleString('id-ID')}</span>
+                      {note && (
+                        <span className="text-neutral-400">{note}</span>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </section>
@@ -175,3 +180,4 @@ export default function App() {
     </div>
   );
 }
+

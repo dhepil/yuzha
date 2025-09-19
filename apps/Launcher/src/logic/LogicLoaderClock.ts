@@ -98,7 +98,9 @@ function pointOnRect(width: number, height: number, angleRad: number): Vec2 {
   }
   if (candidates.length === 0) return { x: 0, y: 0 }
   candidates.sort((a, b) => a.t - b.t)
-  return { x: candidates[0].x, y: candidates[0].y }
+  const best = candidates[0]
+  if (!best) return { x: 0, y: 0 }
+  return { x: best.x, y: best.y }
 }
 
 function rotateVec(v: Vec2, angle: number): Vec2 {
@@ -377,6 +379,7 @@ export function buildClock(app: Application, built: BuiltLayer[]) {
 
   return { items, tick, recompute }
 }
+
 
 
 

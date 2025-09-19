@@ -69,7 +69,11 @@ function projectToRectBorder(cx: number, cy: number, x: number, y: number, w: nu
   }
   if (cand.length === 0) return { x: clamp(x, 0, w), y: clamp(y, 0, h) }
   cand.sort((a, b) => a.t - b.t)
-  return { x: cand[0].x, y: cand[0].y }
+  const first = cand[0];
+  if (!first) {
+    return { x: clamp(x, 0, w), y: clamp(y, 0, h) };
+  }
+  return { x: first.x, y: first.y }
 }
 
 export default function LogicStageDom() {
@@ -411,6 +415,7 @@ export default function LogicStageDom() {
 
   return <div ref={rootRef} className="w-screen h-screen" />
 }
+
 
 
 

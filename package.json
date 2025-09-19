@@ -30,22 +30,51 @@
     "clean": "rimraf apps/**/dist apps/**/node_modules/.vite",
     "typecheck:launcher": "npm run typecheck -w apps/Launcher",
     "typecheck:all": "npm run typecheck:launcher",
-    "ci:verify": "npm run typecheck:all && npm run build:launcher"
+    "ci:verify": "npm run typecheck && npm run lint && npm run test && npm run build:launcher",
+    "typecheck": "tsc --noEmit -p tsconfig.base.json",
+    "lint": "eslint apps/**/src/**/*.{ts,tsx} --cache --max-warnings=0",
+    "lint:fix": "eslint apps/**/src/**/*.{ts,tsx} --cache --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13",
-    "@tailwindcss/forms": "^0.5.7",
-    "@tailwindcss/typography": "^0.5.10",
-    "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/aspect-ratio": "^0.4.2",
-    "typescript": "^5.6.3",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.10",
     "@types/react": "^18.3.7",
     "@types/react-dom": "^18.3.0",
-    "vite": "^7.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "@vitest/coverage-v8": "^3.2.4",
+    "autoprefixer": "^10.4.20",
     "concurrently": "^8.2.2",
-    "rimraf": "^5.0.5"
+    "cross-env": "^10.0.0",
+    "eslint": "^9.35.0",
+    "globals": "^16.4.0",
+    "husky": "^9.1.7",
+    "jsdom": "^27.0.0",
+    "lint-staged": "^16.1.6",
+    "postcss": "^8.4.47",
+    "prettier": "^3.6.2",
+    "rimraf": "^5.0.5",
+    "tailwindcss": "^3.4.13",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
+    "vite": "^7.0.4",
+    "vitest": "^3.2.4"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": [
+      "eslint --fix"
+    ],
+    "**/*.{js,jsx,css,md,json}": [
+      "prettier --write"
+    ]
   }
 }
