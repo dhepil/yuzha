@@ -38,8 +38,7 @@
     "format:fix": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:cov": "vitest run --coverage",
-    "prepare": "husky"
+    "test:cov": "vitest run --coverage"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
@@ -57,7 +56,6 @@
     "cross-env": "^10.0.0",
     "eslint": "^9.35.0",
     "globals": "^16.4.0",
-    "husky": "^9.1.7",
     "jsdom": "^27.0.0",
     "lint-staged": "^16.1.6",
     "postcss": "^8.4.47",
