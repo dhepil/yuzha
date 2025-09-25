@@ -16,7 +16,7 @@ export default function LogicStage() {
       if (!el) return
 
       try {
-        // Create stage adapter with fixed 1024×1024 dimensions
+        // Create stage adapter with fixed 2048×2048 dimensions
         adapter = new PixiStageAdapter({
           backgroundAlpha: 0,
           antialias: true,

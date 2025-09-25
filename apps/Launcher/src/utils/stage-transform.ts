@@ -6,8 +6,16 @@ import type {
 
 /**
  * Stage Transform Utilities
- * Handles 1024×1024 stage scaling and coordinate transformation
+ * Handles 2048×2048 stage scaling and coordinate transformation
+ * between screen space and stage world coordinates.
  */
+
+// Design canvas dimensions (fixed)
+export const STAGE_WIDTH = 2048
+export const STAGE_HEIGHT = 2048
+
+// Display scale factor to make 2048×2048 display like 1024×1024
+export const DISPLAY_SCALE_FACTOR = 0.5
 
 export interface StageTransform {
   scale: number
@@ -22,18 +30,14 @@ export interface StageCoordinates {
   stageY: number
 }
 
-// Design canvas dimensions (fixed)
-export const STAGE_WIDTH = 1024
-export const STAGE_HEIGHT = 1024
-
 /**
  * Calculate stage transform for cover behavior
  * Fills viewport while maintaining aspect ratio
  */
 export function calculateStageTransform(viewportWidth: number, viewportHeight: number): StageTransform {
   // Cover behavior: scale to fill viewport, crop what doesn't fit
-  const scaleX = viewportWidth / STAGE_WIDTH
-  const scaleY = viewportHeight / STAGE_HEIGHT
+  const scaleX = (viewportWidth / STAGE_WIDTH) * DISPLAY_SCALE_FACTOR
+  const scaleY = (viewportHeight / STAGE_HEIGHT) * DISPLAY_SCALE_FACTOR
   const scale = Math.max(scaleX, scaleY) // Use larger scale for cover
   
   const scaledWidth = STAGE_WIDTH * scale
