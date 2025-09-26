@@ -2,8 +2,8 @@ import { Assets, Container, Sprite } from 'pixi.js'
 import type { Application } from 'pixi.js'
 import type { BuiltLayer, BuildResult, LogicConfig, LayerConfig } from '../logic/LogicTypes'
 import { logicApplyBasicTransform, logicZIndexFor, sortLayersForRender } from './LayerPlacement'
-import { buildSpin, tickSpin } from '../logic/LogicLoaderSpin'
 import { buildOrbit } from '../logic/LogicLoaderOrbit'
+import { buildLayerSpin, tickLayerSpin } from './LayerSpin'
 
 export function resolveLayerImageUrl(cfg: LogicConfig, layer: LayerConfig): string | null {
   const ref = layer.imageRef
@@ -65,7 +65,14 @@ export async function createLogicScene(app: Application, cfg: LogicConfig): Prom
     built.push(builtLayer)
   }
 
-  const { items: spinItems, rpmBySprite: spinRpmBySprite } = buildSpin(app, built)
+  const { items: spinItems, rpmBySprite: spinRpmBySprite } = buildLayerSpin(
+    built.map((b) => ({
+      sprite: b.sprite,
+      rpm: b.cfg.spinRPM,
+      dir: b.cfg.spinDir ?? null
+    }))
+  )
+
   const orbit = buildOrbit(app, built, spinRpmBySprite)
   let elapsed = 0
 
@@ -80,7 +87,7 @@ export async function createLogicScene(app: Application, cfg: LogicConfig): Prom
     if (spinItems.length === 0 && orbit.items.length === 0) return
     const dt = (app.ticker.deltaMS || 16.667) / 1000
     elapsed += dt
-    tickSpin(spinItems, elapsed)
+    tickLayerSpin(spinItems, elapsed)
     orbit.tick(elapsed)
   }
   if (spinItems.length > 0 || orbit.items.length > 0) {
