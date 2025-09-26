@@ -1,14 +1,95 @@
 {
   "layersID": [
-    "L10","L11","L12","L13","L14","L15","L16","L17","L18","L19",
-    "L20","L21","L22","L23","L24","L25","L26","L27","L28","L29",
-    "L30","L31","L32","L33","L34","L35","L36","L37","L38","L39",
-    "L40","L41","L42","L43","L44","L45","L46","L47","L48","L49",
-    "L50","L51","L52","L53","L54","L55","L56","L57","L58","L59",
-    "L60","L61","L62","L63","L64","L65","L66","L67","L68","L69",
-    "L70","L71","L72","L73","L74","L75","L76","L77","L78","L79",
-    "L80","L81","L82","L83","L84","L85","L86","L87","L88","L89",
-    "L90","L91","L92","L93","L94","L95","L96","L97","L98","L99"
+    "L10",
+    "L11",
+    "L12",
+    "L13",
+    "L14",
+    "L15",
+    "L16",
+    "L17",
+    "L18",
+    "L19",
+    "L20",
+    "L21",
+    "L22",
+    "L23",
+    "L24",
+    "L25",
+    "L26",
+    "L27",
+    "L28",
+    "L29",
+    "L30",
+    "L31",
+    "L32",
+    "L33",
+    "L34",
+    "L35",
+    "L36",
+    "L37",
+    "L38",
+    "L39",
+    "L40",
+    "L41",
+    "L42",
+    "L43",
+    "L44",
+    "L45",
+    "L46",
+    "L47",
+    "L48",
+    "L49",
+    "L50",
+    "L51",
+    "L52",
+    "L53",
+    "L54",
+    "L55",
+    "L56",
+    "L57",
+    "L58",
+    "L59",
+    "L60",
+    "L61",
+    "L62",
+    "L63",
+    "L64",
+    "L65",
+    "L66",
+    "L67",
+    "L68",
+    "L69",
+    "L70",
+    "L71",
+    "L72",
+    "L73",
+    "L74",
+    "L75",
+    "L76",
+    "L77",
+    "L78",
+    "L79",
+    "L80",
+    "L81",
+    "L82",
+    "L83",
+    "L84",
+    "L85",
+    "L86",
+    "L87",
+    "L88",
+    "L89",
+    "L90",
+    "L91",
+    "L92",
+    "L93",
+    "L94",
+    "L95",
+    "L96",
+    "L97",
+    "L98",
+    "L99"
   ],
   "imageRegistry": {
     "a": "/asset/SAMPLE.png",
@@ -43,109 +124,273 @@
   "layers": [
     {
       "id": "L10",
-      "imageRef": { "kind": "urlId", "id": "a" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 28 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "a"
+      },
+      "position": {
+        "xPct": 50,
+        "yPct": 50
+      },
+      "scale": {
+        "pct": 28
+      },
       "spinRPM": 0,
       "spinDir": "cw",
       "orbitRPM": 0,
       "orbitDir": "cw",
-      "orbitCenter": { "xPct": 50, "yPct": 50 },
+      "orbitCenter": {
+        "xPct": 50,
+        "yPct": 50
+      },
       "orbitPhaseDeg": null,
       "orbitOrientPolicy": "none",
       "orbitOrientDeg": 0
     },
     {
       "id": "L15",
-      "imageRef": { "kind": "urlId", "id": "STARBG" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 64.3 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "STARBG"
+      },
+      "position": {
+        "xPct": 50,
+        "yPct": 50
+      },
+      "scale": {
+        "pct": 64.3
+      },
       "spinRPM": 0.3,
-      "spinDir": "cw"
+      "spinDir": "cw",
+      "orbitRPM": null,
+      "orbitDir": null,
+      "orbitCenter": null,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null,
+      "orbitOrientDeg": null
     },
     {
       "id": "L16",
-      "imageRef": { "kind": "urlId", "id": "GEAR1" },
-      "position": { "xPct": 20, "yPct": 60 },
-      "scale": { "pct": 160 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "GEAR1"
+      },
+      "position": {
+        "xPct": 20,
+        "yPct": 60
+      },
+      "scale": {
+        "pct": 160
+      },
       "spinRPM": 1,
-      "spinDir": "cw"
+      "spinDir": "cw",
+      "orbitRPM": null,
+      "orbitDir": null,
+      "orbitCenter": null,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null,
+      "orbitOrientDeg": null
     },
     {
       "id": "L17",
-      "imageRef": { "kind": "urlId", "id": "GEAR2" },
-      "position": { "xPct": 40, "yPct": 40 },
-      "scale": { "pct": 81 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "GEAR2"
+      },
+      "position": {
+        "xPct": 40,
+        "yPct": 40
+      },
+      "scale": {
+        "pct": 81
+      },
       "spinRPM": 1.5,
-      "spinDir": "ccw"
+      "spinDir": "ccw",
+      "orbitRPM": null,
+      "orbitDir": null,
+      "orbitCenter": null,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null,
+      "orbitOrientDeg": null
     },
     {
       "id": "L18",
-      "imageRef": { "kind": "urlId", "id": "GEAR3" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 110 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "GEAR3"
+      },
+      "position": {
+        "xPct": 50,
+        "yPct": 50
+      },
+      "scale": {
+        "pct": 110
+      },
       "spinRPM": 1.8,
-      "spinDir": "cw"
+      "spinDir": "cw",
+      "orbitRPM": null,
+      "orbitDir": null,
+      "orbitCenter": null,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null,
+      "orbitOrientDeg": null
     },
     {
       "id": "L19",
-      "imageRef": { "kind": "urlId", "id": "GEARMOON" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 80 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "GEARMOON"
+      },
+      "position": {
+        "xPct": 50,
+        "yPct": 50
+      },
+      "scale": {
+        "pct": 80
+      },
       "spinRPM": 1.6,
-      "spinDir": "cw"
+      "spinDir": "cw",
+      "orbitRPM": null,
+      "orbitDir": null,
+      "orbitCenter": null,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null,
+      "orbitOrientDeg": null
     },
     {
       "id": "L20",
-      "imageRef": { "kind": "urlId", "id": "GEAR1" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 50 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "GEAR1"
+      },
+      "position": {
+        "xPct": 50,
+        "yPct": 50
+      },
+      "scale": {
+        "pct": 50
+      },
       "spinRPM": 1,
-      "spinDir": "ccw"
+      "spinDir": "ccw",
+      "orbitRPM": null,
+      "orbitDir": null,
+      "orbitCenter": null,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null,
+      "orbitOrientDeg": null
     },
     {
       "id": "L21",
-      "imageRef": { "kind": "urlId", "id": "STARBGHOLE" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 64.3 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "STARBGHOLE"
+      },
+      "position": {
+        "xPct": 50,
+        "yPct": 50
+      },
+      "scale": {
+        "pct": 64.3
+      },
       "spinRPM": 0.3,
-      "spinDir": "cw"
+      "spinDir": "cw",
+      "orbitRPM": null,
+      "orbitDir": null,
+      "orbitCenter": null,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null,
+      "orbitOrientDeg": null
     },
     {
       "id": "L22",
-      "imageRef": { "kind": "urlId", "id": "STAR1" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 150 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "STAR1"
+      },
+      "position": {
+        "xPct": 50,
+        "yPct": 50
+      },
+      "scale": {
+        "pct": 150
+      },
       "spinRPM": 0.7,
-      "spinDir": "cw"
+      "spinDir": "cw",
+      "orbitRPM": null,
+      "orbitDir": null,
+      "orbitCenter": null,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null,
+      "orbitOrientDeg": null
     },
     {
       "id": "L23",
-      "imageRef": { "kind": "urlId", "id": "STAR2" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 130 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "STAR2"
+      },
+      "position": {
+        "xPct": 50,
+        "yPct": 50
+      },
+      "scale": {
+        "pct": 130
+      },
       "spinRPM": 0.5,
-      "spinDir": "cw"      
+      "spinDir": "cw",
+      "orbitRPM": null,
+      "orbitDir": null,
+      "orbitCenter": null,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null,
+      "orbitOrientDeg": null
     },
     {
       "id": "L24",
-      "imageRef": { "kind": "urlId", "id": "STAR2" },
-      "position": { "xPct": 50, "yPct": 30 },
-      "scale": { "pct": 100 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "STAR2"
+      },
+      "position": {
+        "xPct": 50,
+        "yPct": 30
+      },
+      "scale": {
+        "pct": 100
+      },
       "spinRPM": 0.5,
       "spinDir": "cw",
       "orbitRPM": 1,
       "orbitDir": "cw",
-      "orbitCenter": { "xPct": 50, "yPct": 50 },
-      "orbitOrientDeg": 0    
+      "orbitCenter": {
+        "xPct": 50,
+        "yPct": 50
+      },
+      "orbitOrientDeg": 0,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null
     },
     {
       "id": "L25",
-      "imageRef": { "kind": "urlId", "id": "a" },
-      "position": { "xPct": 50, "yPct": 50 },
-      "scale": { "pct": 100 },
+      "imageRef": {
+        "kind": "urlId",
+        "id": "a"
+      },
+      "position": {
+        "xPct": 50,
+        "yPct": 50
+      },
+      "scale": {
+        "pct": 100
+      },
       "spinRPM": 0.5,
-      "spinDir": "cw"
+      "spinDir": "cw",
+      "orbitRPM": null,
+      "orbitDir": null,
+      "orbitCenter": null,
+      "orbitPhaseDeg": null,
+      "orbitOrientPolicy": null,
+      "orbitOrientDeg": null
     }
   ]
 }
