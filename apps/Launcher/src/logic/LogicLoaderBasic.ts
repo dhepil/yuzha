@@ -1,5 +1,5 @@
 import type { Application, Sprite } from 'pixi.js'
-import type { LayerConfig } from './sceneTypes'
+import type { LayerConfig } from './LogicTypes'
 import { STAGE_WIDTH, STAGE_HEIGHT } from '../utils/stage-transform'
 
 // Basic placement & ordering helpers
@@ -20,4 +20,3 @@ export function logicApplyBasicTransform(app: Application, sp: Sprite, cfg: Laye
   sp.scale.set(s, s)
   sp.zIndex = logicZIndexFor(cfg)
 }
-

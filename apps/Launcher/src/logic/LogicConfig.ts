@@ -1,4 +1,4 @@
-import type { LogicConfig } from './sceneTypes'
+import type { LogicConfig } from './LogicTypes'
 // Temporary shim: expose config from original location under the new logic/ path
 // @ts-ignore - JSON import without type
 import rawConfig from './LogicConfig.json'

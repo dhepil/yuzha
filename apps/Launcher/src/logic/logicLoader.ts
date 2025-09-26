@@ -1,6 +1,6 @@
 import { Assets, Container } from 'pixi.js'
 import type { Application } from 'pixi.js'
-import type { LogicConfig } from './sceneTypes'
+import type { LogicConfig } from './LogicTypes'
 import { logicApplyBasicTransform } from './LogicLoaderBasic'
 import { buildSpin, tickSpin } from './LogicLoaderSpin'
 import { buildOrbit } from './LogicLoaderOrbit'

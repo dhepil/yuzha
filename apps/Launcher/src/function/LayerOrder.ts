@@ -1,4 +1,4 @@
-import type { LayerConfig } from '../logic/sceneTypes'
+import type { LayerConfig } from '../logic/LogicTypes'
 import { logicZIndexFor } from '../logic/LogicLoaderBasic'
 
 export function sortLayersForRender(layers: LayerConfig[]): LayerConfig[] {

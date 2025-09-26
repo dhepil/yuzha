@@ -1,8 +1,7 @@
 import { Assets, Sprite } from 'pixi.js'
 import type { Application } from 'pixi.js'
-import type { LogicConfig, LayerConfig } from '../logic/sceneTypes'
+import type { BuiltLayer, LogicConfig, LayerConfig } from '../logic/LogicTypes'
 import { logicApplyBasicTransform, logicZIndexFor } from '../logic/LogicLoaderBasic'
-import type { BuiltLayer } from '../logic/LogicTypes'
 
 export function resolveLayerImageUrl(cfg: LogicConfig, layer: LayerConfig): string | null {
   const ref = layer.imageRef

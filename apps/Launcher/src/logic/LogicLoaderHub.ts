@@ -2,7 +2,7 @@
 // In later phases, this will orchestrate processors (Basic, Spin, Orbit, ...).
 
 import type { Application } from 'pixi.js'
-import type { LogicConfig } from './sceneTypes'
+import type { LogicConfig } from './LogicTypes'
 import type { BuildResult } from './LogicTypes'
 
 // For now, delegate to the current implementation to keep behavior identical.

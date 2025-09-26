@@ -1,7 +1,7 @@
 import React from 'react';
 import { PixiCore, PixiCoreConfiguration } from '@shared/pixi';
 import { buildSceneFromLogic } from './logicLoader';
-import type { LogicConfig } from './sceneTypes';
+import type { LogicConfig } from './LogicTypes';
 import logicConfigJson from './LogicConfig';
 
 export default function LogicStage() {
@@ -87,5 +87,3 @@ export default function LogicStage() {
     <div ref={ref} className="w-full h-full" />
   );
 }
-
-

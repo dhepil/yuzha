@@ -1,5 +1,5 @@
 import type { Container } from 'pixi.js'
-import type { LogicConfig } from '../logic/sceneTypes'
+import type { LogicConfig } from '../logic/LogicTypes'
 import { buildSceneFromLogic } from '../logic/logicLoader'
 import {
   PixiStageAdapter,
