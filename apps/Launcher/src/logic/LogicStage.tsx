@@ -2,7 +2,7 @@ import React from 'react';
 import { PixiCore, PixiCoreConfiguration } from '@shared/pixi';
 import { createLogicScene } from '../function/LayerCreator';
 import type { LogicConfig } from './LogicTypes';
-import logicConfigJson from './LogicConfig';
+import logicConfigJson from '../LogicConfig';
 
 export default function LogicStage() {
   const ref = React.useRef<HTMLDivElement | null>(null);

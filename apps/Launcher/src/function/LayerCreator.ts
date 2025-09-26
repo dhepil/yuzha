@@ -2,7 +2,7 @@ import { Assets, Container, Sprite } from 'pixi.js'
 import type { Application } from 'pixi.js'
 import type { BuiltLayer, BuildResult, LogicConfig, LayerConfig } from '../logic/LogicTypes'
 import { logicApplyBasicTransform, logicZIndexFor, sortLayersForRender } from './LayerPlacement'
-import { buildOrbit } from '../logic/LogicLoaderOrbit'
+import { buildLayerOrbit } from './LayerOrbit'
 import { buildLayerSpin, tickLayerSpin } from './LayerSpin'
 
 export function resolveLayerImageUrl(cfg: LogicConfig, layer: LayerConfig): string | null {
@@ -73,7 +73,19 @@ export async function createLogicScene(app: Application, cfg: LogicConfig): Prom
     }))
   )
 
-  const orbit = buildOrbit(app, built, spinRpmBySprite)
+  const orbit = buildLayerOrbit(
+    built.map((b) => ({
+      sprite: b.sprite,
+      position: b.cfg.position ?? { xPct: 0, yPct: 0 },
+      orbitRPM: b.cfg.orbitRPM,
+      orbitDir: b.cfg.orbitDir ?? null,
+      orbitCenter: b.cfg.orbitCenter ?? null,
+      orbitPhaseDeg: b.cfg.orbitPhaseDeg ?? null,
+      orbitOrientPolicy: b.cfg.orbitOrientPolicy ?? null,
+      orbitOrientDeg: b.cfg.orbitOrientDeg ?? null,
+      spinRPM: spinRpmBySprite.get(b.sprite) ?? 0
+    }))
+  )
   let elapsed = 0
 
   const onResize = () => {
@@ -105,3 +117,5 @@ export async function createLogicScene(app: Application, cfg: LogicConfig): Prom
 
   return { container, layers: built }
 }
+
+
