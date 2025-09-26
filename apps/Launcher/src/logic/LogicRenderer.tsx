@@ -1,6 +1,7 @@
 import React from 'react'
 import type { LogicConfig } from './LogicTypes'
-import { mountLogicStage, type LogicStageHandle } from './LogicStageAdapter'
+import { mountStage, type StageMountHandle } from '@shared/pixi/logicStage'
+import { createLogicScene } from '../function/LayerCreator'
 
 export type LogicRendererProps = {
   cfg: LogicConfig
@@ -14,12 +15,12 @@ export default function LogicRenderer(props: LogicRendererProps) {
   React.useEffect(() => {
     const el = ref.current
     if (!el) return
-    let handle: LogicStageHandle | null = null
+    let handle: StageMountHandle | null = null
 
     let cancelled = false
     ;(async () => {
       try {
-        handle = await mountLogicStage(el, cfg, { dprCap: 2 })
+        handle = await mountStage(el, cfg, createLogicScene, { dprCap: 2 })
       } catch (e) {
         if (!cancelled) console.error('[LogicRenderer] mount failed', e)
       }
