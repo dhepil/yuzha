@@ -1,7 +1,7 @@
 import { Assets, Container, Sprite } from 'pixi.js'
 import type { Application } from 'pixi.js'
 import type { LogicConfig, LayerConfig } from '../LogicConfig'
-import { STAGE_WIDTH, STAGE_HEIGHT } from '@shared/stages/stage-transform'
+import { STAGE_WIDTH, STAGE_HEIGHT } from '@shared/stages/StageCore'
 import { buildLayerOrbit } from './LayerOrbit'
 import { buildLayerSpin, tickLayerSpin } from './LayerSpin'
 

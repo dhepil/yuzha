@@ -4,7 +4,7 @@ import { useLauncherBtnGesture } from './ui/LauncherBtnGesture'
 import LogicRendererBadge from './utils/LogicRendererBadge'
 import LogicUpdater from './utils/LogicUpdater'
 import LogicApiTester from './utils/LogicApiTester'
-import { StageHost } from '@shared/stages'
+import StageHost from '@shared/stages/StagePlugin'
 import logicConfig from './LogicConfig'
 import { createLogicScene } from './function/LayerCreator'
 

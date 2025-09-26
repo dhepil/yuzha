@@ -2,10 +2,12 @@ import React from 'react'
 import type { Container } from 'pixi.js'
 import {
   mountStage,
+  type StageSceneFactory,
   type StageMountHandle,
-  type StageSceneFactory
-} from './mountStage'
-import type { PixiStageAdapterOptions } from './stage-pixi-adapter'
+  type PixiStageAdapterOptions
+} from './StageCore'
+
+export * from './StageCore'
 
 type StageHostProps<Cfg, Result extends { container: Container }> = {
   config: Cfg
@@ -35,7 +37,6 @@ export default function StageHost<Cfg, Result extends { container: Container }>(
           return
         }
         handleRef.current = handle
-        setError(null)
       } catch (err) {
         if (cancelled) return
         onError?.(err)
@@ -62,4 +63,3 @@ export default function StageHost<Cfg, Result extends { container: Container }>(
 
   return <div ref={ref} className={className ?? 'w-full h-full'} />
 }
-
