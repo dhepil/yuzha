@@ -1,7 +1,7 @@
 import { Assets, Container } from 'pixi.js'
 import type { Application } from 'pixi.js'
 import type { LogicConfig } from './LogicTypes'
-import { logicApplyBasicTransform } from './LogicLoaderBasic'
+import { logicApplyBasicTransform, sortLayersForRender } from '../function/LayerPlacement'
 import { buildSpin, tickSpin } from './LogicLoaderSpin'
 import { buildOrbit } from './LogicLoaderOrbit'
 import type { BuiltLayer, BuildResult } from './LogicTypes'
@@ -9,7 +9,6 @@ import {
   createLayerSprite,
   resolveLayerImageUrl
 } from '../function/LayerCreator'
-import { sortLayersForRender } from '../function/LayerOrder'
 
 // z-index and base transforms are delegated to Basic processor helpers
 
