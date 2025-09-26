@@ -5,7 +5,7 @@
 
 import { useState, useCallback, useRef, useEffect, createElement } from 'react'
 import type { PointerEvent as ReactPointerEvent, HTMLAttributes, CSSProperties, ReactNode } from 'react'
-import type { StageTransformManager } from './stage-transform'
+import type { StageTransformManager } from '@shared/pixi/stage-transform'
 
 export interface StageGestureOptions {
   /** Coordinate transformer manager */

@@ -1,6 +1,6 @@
 import type { Application, Sprite } from 'pixi.js'
 import type { LayerConfig } from '../logic/LogicTypes'
-import { STAGE_WIDTH, STAGE_HEIGHT } from '../utils/stage-transform'
+import { STAGE_WIDTH, STAGE_HEIGHT } from '@shared/pixi/stage-transform'
 
 // Ordering helper: derive z-index from layer id
 export function logicZIndexFor(cfg: LayerConfig): number {

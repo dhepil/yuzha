@@ -1,6 +1,6 @@
 import React from 'react'
 import type { LogicConfig } from './LogicTypes'
-import { mountLogicStage, type LogicStageHandle } from '../pixi/logicAdapter'
+import { mountLogicStage, type LogicStageHandle } from './LogicStageAdapter'
 
 export type LogicRendererProps = {
   cfg: LogicConfig

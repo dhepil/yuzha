@@ -1,6 +1,6 @@
 import React from 'react';
 import { PixiCore, PixiCoreConfiguration } from '@shared/pixi';
-import { buildSceneFromLogic } from './logicLoader';
+import { createLogicScene } from '../function/LayerCreator';
 import type { LogicConfig } from './LogicTypes';
 import logicConfigJson from './LogicConfig';
 
@@ -37,7 +37,7 @@ export default function LogicStage() {
         // Build and add the scene
         const cfg = logicConfigJson as LogicConfig;
         const pixiInstance = core.getPixiInstance();
-        const scene = await buildSceneFromLogic(pixiInstance.app, cfg);
+        const scene = await createLogicScene(pixiInstance.app, cfg);
         
         if (!mounted) {
           scene.container.destroy({ children: true });

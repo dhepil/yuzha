@@ -1,10 +1,10 @@
 import type { Container } from 'pixi.js'
-import type { LogicConfig } from '../logic/LogicTypes'
-import { buildSceneFromLogic } from '../logic/logicLoader'
+import type { LogicConfig } from './LogicTypes'
+import { createLogicScene } from '../function/LayerCreator'
 import {
   PixiStageAdapter,
   type PixiStageAdapterOptions
-} from '../utils/stage-pixi-adapter'
+} from '@shared/pixi/stage-pixi-adapter'
 
 export type LogicStageOptions = PixiStageAdapterOptions
 
@@ -22,7 +22,7 @@ export async function mountLogicStage(
 
   let sceneContainer: Container | null = null
   try {
-    const scene = await buildSceneFromLogic(app, cfg)
+    const scene = await createLogicScene(app, cfg)
     sceneContainer = scene.container
     app.stage.addChild(sceneContainer)
   } catch (e) {
