@@ -5,8 +5,7 @@ export const STAGE_HEIGHT = 2048;
 export const RENDERER_MODES = {
     WEBGL: 'webgl',
     CANVAS: 'canvas',
-    PIXI: 'pixi',
-    DOM: 'dom'
+    PIXI: 'pixi'
 } as const;
 
 export const TRANSFORM_DEFAULTS = {

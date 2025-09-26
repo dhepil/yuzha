@@ -11,8 +11,8 @@ interface ImportMetaEnv {
   readonly VITE_URL_4EXTRA?: string
   readonly VITE_URL_5RARA?: string
 
-  /** Paksa renderer: 'auto' | 'pixi' | 'dom' (opsional) */
-  readonly VITE_RENDERER?: 'auto' | 'pixi' | 'dom'
+  /** Paksa renderer: 'auto' | 'pixi' (opsional) */
+  readonly VITE_RENDERER?: 'auto' | 'pixi'
 }
 
 interface ImportMeta {
