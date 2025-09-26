@@ -4,7 +4,9 @@ import { useLauncherBtnGesture } from './ui/LauncherBtnGesture'
 import LogicRendererBadge from './utils/LogicRendererBadge'
 import LogicUpdater from './utils/LogicUpdater'
 import LogicApiTester from './utils/LogicApiTester'
-import LogicStage from './logic/LogicStage'
+import StageHost from '@shared/stages/LogicStageHost'
+import logicConfig from './LogicConfig'
+import { createLogicScene } from './function/LayerCreator'
 
 /**
  * Layar utama launcher yang menampilkan navigasi dock.
@@ -16,7 +18,7 @@ export default function MainScreen() {
     <div className="relative w-screen h-screen overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
       {/* Renderer canvas behind UI */}
       <div className="absolute inset-0">
-        <LogicStage />
+        <StageHost config={logicConfig} createScene={createLogicScene} />
       </div>
       {/* Invisible gesture target */}
       <div {...gesture.bindTargetProps()} className="absolute inset-0 pointer-events-auto" />
@@ -45,4 +47,7 @@ export default function MainScreen() {
     </div>
   )
 }
+
+
+
 
