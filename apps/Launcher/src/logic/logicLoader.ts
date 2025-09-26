@@ -3,19 +3,8 @@ import type { Application } from 'pixi.js'
 import type { LogicConfig, LayerConfig } from './sceneTypes'
 import { logicApplyBasicTransform, logicZIndexFor } from './LogicLoaderBasic'
 import { buildSpin, tickSpin } from './LogicLoaderSpin'
-// clampRpm60 no longer used here (handled in Orbit/Spin modules)
 import { buildOrbit } from './LogicLoaderOrbit'
-
-export type BuiltLayer = {
-  id: string
-  sprite: Sprite
-  cfg: LayerConfig
-}
-
-export type BuildResult = {
-  container: Container
-  layers: BuiltLayer[]
-}
+import type { BuiltLayer, BuildResult } from './LogicTypes'
 
 function getUrlForImageRef(cfg: LogicConfig, ref: LayerConfig['imageRef']): string | null {
   if (ref.kind === 'url') return ref.url
@@ -37,7 +26,6 @@ export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): P
   })
 
   const built: BuiltLayer[] = []
-  let warnedZ = false
 
   // Prefetch assets in parallel to avoid sequential fetch latency
   const urlSet = new Set<string>()
@@ -45,29 +33,17 @@ export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): P
     const u = getUrlForImageRef(cfg, layer.imageRef)
     if (u) urlSet.add(u)
   }
-  try {
-    await Promise.all(
-      Array.from(urlSet).map((u) =>
-        Assets.load(u).catch((e) => {
-          console.warn('[logic] Preload failed for', u, e)
-        })
-      )
+  
+  await Promise.all(
+    Array.from(urlSet).map((u) =>
+      Assets.load(u).catch((e) => {
+        console.warn('[logic] Preload failed for', u, e)
+        return null
+      })
     )
-  } catch {}
+  )
 
   for (const layer of layers) {
-    // Warn once if legacy `z` is present and differs from ID-derived order
-    const anyLayer = layer as unknown as { z?: number }
-    if (!warnedZ && typeof anyLayer.z === 'number') {
-      const derived = logicZIndexFor(layer)
-      if (anyLayer.z !== derived) {
-        console.warn('[logic] `z` is deprecated and ignored. Use numeric ID order. Layer:', layer.id,
-          ' legacy z:', anyLayer.z, ' derived:', derived)
-      } else {
-        console.warn('[logic] `z` property is deprecated and ignored. Remove it from config. Layer:', layer.id)
-      }
-      warnedZ = true
-    }
 
     const url = getUrlForImageRef(cfg, layer.imageRef)
     if (!url) {
@@ -116,9 +92,11 @@ export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): P
 
   const prevCleanup = (container as any)._cleanup as (() => void) | undefined
   ;(container as any)._cleanup = () => {
-    try { window.removeEventListener('resize', resizeListener) } catch {}
-    try { if (spinItems.length > 0 || orbit.items.length > 0) app.ticker.remove(tick) } catch {}
-    try { prevCleanup?.() } catch {}
+    window.removeEventListener('resize', resizeListener)
+    if (spinItems.length > 0 || orbit.items.length > 0) {
+      app.ticker.remove(tick)
+    }
+    prevCleanup?.()
   }
 
   return { container, layers: built }

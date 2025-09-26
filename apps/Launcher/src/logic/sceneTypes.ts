@@ -9,7 +9,6 @@ export type LayerConfig = {
   imageRef: ImageRef
   position: { xPct: number; yPct: number }
   scale?: { pct?: number }
-  angleDeg?: number
   // Runtime animation (optional)
   spinRPM?: number | null
   spinDir?: 'cw' | 'ccw'

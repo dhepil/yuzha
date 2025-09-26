@@ -46,7 +46,6 @@
       "imageRef": { "kind": "urlId", "id": "a" },
       "position": { "xPct": 50, "yPct": 50 },
       "scale": { "pct": 28 },
-      "angleDeg": 0,
       "spinRPM": 0,
       "spinDir": "cw",
       "orbitRPM": 0,
