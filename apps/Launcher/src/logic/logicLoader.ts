@@ -1,16 +1,15 @@
-import { Assets, Container, Sprite } from 'pixi.js'
+import { Assets, Container } from 'pixi.js'
 import type { Application } from 'pixi.js'
-import type { LogicConfig, LayerConfig } from './sceneTypes'
-import { logicApplyBasicTransform, logicZIndexFor } from './LogicLoaderBasic'
+import type { LogicConfig } from './sceneTypes'
+import { logicApplyBasicTransform } from './LogicLoaderBasic'
 import { buildSpin, tickSpin } from './LogicLoaderSpin'
 import { buildOrbit } from './LogicLoaderOrbit'
 import type { BuiltLayer, BuildResult } from './LogicTypes'
-
-function getUrlForImageRef(cfg: LogicConfig, ref: LayerConfig['imageRef']): string | null {
-  if (ref.kind === 'url') return ref.url
-  const url = cfg.imageRegistry[ref.id]
-  return url ?? null
-}
+import {
+  createLayerSprite,
+  resolveLayerImageUrl
+} from '../function/LayerCreator'
+import { sortLayersForRender } from '../function/LayerOrder'
 
 // z-index and base transforms are delegated to Basic processor helpers
 
@@ -19,18 +18,14 @@ export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): P
   container.sortableChildren = true
 
   // Sort layers by z-index then id fallback, to define render order
-  const layers = [...cfg.layers].sort((a, b) => {
-    const za = logicZIndexFor(a); const zb = logicZIndexFor(b)
-    if (za !== zb) return za - zb
-    return a.id.localeCompare(b.id)
-  })
+  const layers = sortLayersForRender(cfg.layers)
 
   const built: BuiltLayer[] = []
 
   // Prefetch assets in parallel to avoid sequential fetch latency
   const urlSet = new Set<string>()
   for (const layer of layers) {
-    const u = getUrlForImageRef(cfg, layer.imageRef)
+    const u = resolveLayerImageUrl(cfg, layer)
     if (u) urlSet.add(u)
   }
   
@@ -44,25 +39,10 @@ export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): P
   )
 
   for (const layer of layers) {
-
-    const url = getUrlForImageRef(cfg, layer.imageRef)
-    if (!url) {
-      console.warn('[logic] Missing image URL for layer', layer.id, layer.imageRef)
-      continue
-    }
-    try {
-      // Texture should be cached from prefetch; load again if needed
-      const texture = await Assets.load(url)
-      const sprite = new Sprite(texture)
-      sprite.anchor.set(0.5)
-      logicApplyBasicTransform(app, sprite, layer)
-      // Set zIndex from ID-derived order only
-      sprite.zIndex = logicZIndexFor(layer)
-      container.addChild(sprite)
-      built.push({ id: layer.id, sprite, cfg: layer })
-    } catch (e) {
-      console.error('[logic] Failed to load', url, 'for layer', layer.id, e)
-    }
+    const builtLayer = await createLayerSprite(app, cfg, layer)
+    if (!builtLayer) continue
+    container.addChild(builtLayer.sprite)
+    built.push(builtLayer)
   }
 
   // Spin runtime: build items and map (no behavior change)
@@ -101,4 +81,3 @@ export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): P
 
   return { container, layers: built }
 }
-
