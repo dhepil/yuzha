@@ -19,6 +19,7 @@ export default defineConfig({
     // Avoid multiple Pixi instances when HMR/monorepo linking
     dedupe: ['pixi.js']
   },
+  publicDir: path.resolve(monorepoRoot, 'shared'),
   optimizeDeps: {
     // Ensure Pixi is pre-bundled for faster dev startup
     include: ['pixi.js']

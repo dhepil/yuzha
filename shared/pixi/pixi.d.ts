@@ -10,9 +10,15 @@ declare module '@shared/pixi' {
     export interface PixiApplicationOptions {
         dprCap?: number;
         backgroundAlpha?: number;
+        backgroundColor?: number | string;
         width?: number;
         height?: number;
         antialias?: boolean;
+        autoDensity?: boolean;
+        resolution?: number;
+        forceCanvas?: boolean;
+        powerPreference?: 'default' | 'high-performance' | 'low-power';
+        autoStart?: boolean;
     }
 
     export interface Position {
