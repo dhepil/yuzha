@@ -2,7 +2,6 @@ import React from 'react';
 import { PixiCore, PixiCoreConfiguration } from '@shared/pixi';
 import { buildSceneFromLogic } from './logicLoader';
 import type { LogicConfig } from './sceneTypes';
-import type { BuildResult } from './logicLoader';
 import logicConfigJson from './LogicConfig';
 
 export default function LogicStage() {
