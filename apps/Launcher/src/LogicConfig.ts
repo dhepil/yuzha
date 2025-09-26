@@ -1,12 +1,37 @@
-import type { LogicConfig } from './logic/LogicTypes'
-// Temporary shim: expose config from original location under the new logic/ path
+export type ImageRegistry = Record<string, string>
+
+export type ImageRef =
+  | { kind: 'urlId'; id: string }
+  | { kind: 'url'; url: string }
+
+export type LayerConfig = {
+  id: string
+  imageRef: ImageRef
+  position: { xPct: number; yPct: number }
+  scale?: { pct?: number }
+  spinRPM?: number | null
+  spinDir?: 'cw' | 'ccw'
+  orbitRPM?: number | null
+  orbitDir?: 'cw' | 'ccw'
+  orbitCenter?: { xPct: number; yPct: number }
+  orbitPhaseDeg?: number | null
+  orbitOrientPolicy?: 'none' | 'auto' | 'override'
+  orbitOrientDeg?: number | null
+}
+
+export type LogicConfig = {
+  layersID: string[]
+  imageRegistry: ImageRegistry
+  layers: LayerConfig[]
+}
+
 // @ts-ignore - JSON import without type
 import rawConfig from './LogicConfig.json'
 
 const assetManifest = import.meta.glob('../../../shared/asset/**/*.{png,jpg,jpeg,gif,webp,avif,svg}', {
   eager: true,
   query: '?url',
-  import: 'default',
+  import: 'default'
 }) as Record<string, string>
 
 const SRC_ASSET_PREFIXES = ['/asset/', 'asset/']
@@ -37,5 +62,3 @@ function remapRegistry(cfg: LogicConfig): LogicConfig {
 const config = remapRegistry(rawConfig as LogicConfig)
 
 export default config
-
-

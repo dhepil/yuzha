@@ -1,7 +1,7 @@
 import React from 'react';
 import { PixiCore, PixiCoreConfiguration } from '@shared/pixi';
 import { createLogicScene } from '../function/LayerCreator';
-import type { LogicConfig } from './LogicTypes';
+import type { LogicConfig } from '../LogicConfig';
 import logicConfigJson from '../LogicConfig';
 
 export default function LogicStage() {

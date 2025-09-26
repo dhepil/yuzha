@@ -1,6 +1,6 @@
 import { Assets, Container, Sprite } from 'pixi.js'
 import type { Application } from 'pixi.js'
-import type { BuiltLayer, BuildResult, LogicConfig, LayerConfig } from '../logic/LogicTypes'
+import type { LogicConfig, LayerConfig } from '../LogicConfig'
 import { STAGE_WIDTH, STAGE_HEIGHT } from '@shared/pixi/stage-transform'
 import { buildLayerOrbit } from './LayerOrbit'
 import { buildLayerSpin, tickLayerSpin } from './LayerSpin'
@@ -33,6 +33,19 @@ function logicApplyBasicTransform(app: Application, sprite: Sprite, cfg: LayerCo
   sprite.scale.set(scale, scale)
   sprite.zIndex = logicZIndexFor(cfg)
 }
+
+// Runtime wrapper for layer sprites and container state
+export type BuiltLayer = {
+  id: string
+  sprite: Sprite
+  cfg: LayerConfig
+}
+
+export type BuildResult = {
+  container: Container
+  layers: BuiltLayer[]
+}
+
 
 export function resolveLayerImageUrl(cfg: LogicConfig, layer: LayerConfig): string | null {
   const ref = layer.imageRef
@@ -146,3 +159,4 @@ export async function createLogicScene(app: Application, cfg: LogicConfig): Prom
 
   return { container, layers: built }
 }
+
