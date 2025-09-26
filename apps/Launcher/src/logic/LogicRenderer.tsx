@@ -1,6 +1,6 @@
 import React from 'react'
 import type { LogicConfig } from './sceneTypes'
-import { mountPixi, type PixiAdapterHandle } from './LogicRendererPixi'
+import { mountLogicStage, type LogicStageHandle } from '../pixi/logicAdapter'
 
 export type LogicRendererProps = {
   cfg: LogicConfig
@@ -14,12 +14,12 @@ export default function LogicRenderer(props: LogicRendererProps) {
   React.useEffect(() => {
     const el = ref.current
     if (!el) return
-    let handle: PixiAdapterHandle | null = null
+    let handle: LogicStageHandle | null = null
 
     let cancelled = false
     ;(async () => {
       try {
-        handle = await mountPixi(el, cfg, { dprCap: 2, resizeTo: window })
+        handle = await mountLogicStage(el, cfg, { dprCap: 2 })
       } catch (e) {
         if (!cancelled) console.error('[LogicRenderer] mount failed', e)
       }
