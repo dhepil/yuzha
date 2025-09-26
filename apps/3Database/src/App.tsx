@@ -1,5 +1,5 @@
-﻿import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { usePasskeySession } from '@shared/hooks/usePasskeySession';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { usePasskeySession } from '@shared/auth/passkey';
 import {
   listModuleSubmissions,
   subscribeToLocalData,
