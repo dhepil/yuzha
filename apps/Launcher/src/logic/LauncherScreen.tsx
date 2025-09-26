@@ -1,9 +1,9 @@
 import React from 'react'
 import { LauncherBtnPanel } from '../ui/LauncherBtn'
 import { useLauncherBtnGesture } from '../ui/LauncherBtnGesture'
-import LogicRendererBadge from './LogicRendererBadge'
-import LauncherUpdater from './LauncherUpdater'
-import LogicApiTester from './LogicApiTester'
+import LogicRendererBadge from '../utils/LogicRendererBadge'
+import LogicUpdater from '../utils/LogicUpdater'
+import LogicApiTester from '../utils/LogicApiTester'
 import LogicStage from './LogicStage'
 
 /**
@@ -41,7 +41,7 @@ export default function LauncherScreen() {
       {/* Renderer badge and updater (hold with launcher) */}
       <LogicRendererBadge visible={gesture.open} label="Renderer: PixiJS" />
       <LogicApiTester visible={gesture.open} />
-      <LauncherUpdater visible={gesture.open} />
+      <LogicUpdater visible={gesture.open} />
     </div>
   )
 }

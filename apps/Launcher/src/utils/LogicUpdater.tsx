@@ -1,6 +1,6 @@
 import React from 'react'
 
-export type LauncherUpdaterProps = {
+export type LogicUpdaterProps = {
   visible: boolean
 }
 
@@ -26,7 +26,7 @@ async function clearCachesAndReload() {
   }
 }
 
-export default function LauncherUpdater(props: LauncherUpdaterProps) {
+export default function LogicUpdater(props: LogicUpdaterProps) {
   if (!props.visible) return null
   return (
     <button
@@ -39,4 +39,3 @@ export default function LauncherUpdater(props: LauncherUpdaterProps) {
     </button>
   )
 }
-
