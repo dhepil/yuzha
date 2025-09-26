@@ -1,5 +1,5 @@
 import React from 'react'
-import type { ClockHand, ClockHandSelection, LogicConfig, LayerConfig } from './sceneTypes'
+import type { LogicConfig, LayerConfig } from './sceneTypes'
 import cfgJson from './LogicConfig'
 import { clamp, clamp01, clampRpm60, toRad } from './LogicMath'
 import { logicZIndexFor } from './LogicLoaderBasic'
@@ -20,16 +20,6 @@ type ImgItem = {
   basePhase: number
   orientPolicy: 'none' | 'auto' | 'override'
   orientDegRad: number
-  // clock
-  clockEnabled: boolean
-  clockOverrideSpin: boolean
-  clockOverrideOrbit: boolean
-  clockHandSpin: 'second' | 'minute' | 'hour'
-  clockHandOrbit: 'second' | 'minute' | 'hour'
-  clockFormat: 12 | 24
-  clockSmooth: boolean
-  clockTipRad: number
-  clockSource: { mode: 'device' | 'utc' | 'server'; tzOffsetMinutes?: number | null }
   // effects (phase 1)
   effs?: Array<
     | { kind: 'fade'; from: number; to: number; durationMs: number; loop: boolean; easing: 'linear' | 'sineInOut' }
@@ -129,22 +119,6 @@ export default function LogicStageDom() {
 
       root.appendChild(img)
 
-      const clockCfg = layer.clock
-      const clockEnabled = !!clockCfg?.enabled
-      const spinHandSel: ClockHandSelection = clockCfg?.spinHand ?? (clockEnabled ? 'second' : 'none')
-      const orbitHandSel: ClockHandSelection = clockCfg?.orbitHand ?? 'none'
-      const clockOverrideSpin = clockEnabled && spinHandSel !== 'none'
-      const clockOverrideOrbit = clockEnabled && orbitHandSel !== 'none'
-      const clockHandSpin: ClockHand = spinHandSel === 'none' ? 'second' : spinHandSel
-      const clockHandOrbit: ClockHand = orbitHandSel === 'none' ? 'second' : orbitHandSel
-      const clockFormat = (clockCfg?.format === 24 ? 24 : 12) as 12 | 24
-      const clockSmooth = clockCfg?.smooth ?? true
-      const clockTipRad = toRad(clockCfg?.tip?.angleDeg ?? 90)
-      const clockSourceMode = clockCfg?.timezone ?? 'device'
-      const clockSource = {
-        mode: (clockSourceMode === 'utc' ? 'utc' : clockSourceMode === 'server' ? 'server' : 'device') as 'device' | 'utc' | 'server',
-        tzOffsetMinutes: clockCfg?.source?.tzOffsetMinutes ?? null,
-      }
       // spin
       const sRpm = clampRpm60(layer.spinRPM)
       const spinDir: 1 | -1 = layer.spinDir === 'ccw' ? -1 : 1
@@ -155,9 +129,7 @@ export default function LogicStageDom() {
       const oRpm = clampRpm60(layer.orbitRPM)
       const orbitDir: 1 | -1 = layer.orbitDir === 'ccw' ? -1 : 1
       const orbitRadPerSec = (oRpm * Math.PI) / 30
-      const orbitCenterSeed = clockOverrideOrbit
-        ? (clockCfg?.orbitCenter ?? clockCfg?.center ?? layer.orbitCenter ?? { xPct: 50, yPct: 50 })
-        : (layer.orbitCenter ?? { xPct: 50, yPct: 50 })
+      const orbitCenterSeed = layer.orbitCenter ?? { xPct: 50, yPct: 50 }
       const centerPct = { x: clamp(orbitCenterSeed.xPct ?? 50, 0, 100), y: clamp(orbitCenterSeed.yPct ?? 50, 0, 100) }
       const cx = w * (centerPct.x / 100)
       const cy = h * (centerPct.y / 100)
@@ -222,15 +194,6 @@ export default function LogicStageDom() {
         basePhase,
         orientPolicy,
         orientDegRad,
-        clockEnabled: clockEnabled,
-        clockOverrideSpin,
-        clockOverrideOrbit,
-        clockHandSpin,
-        clockHandOrbit,
-        clockFormat,
-        clockSmooth,
-        clockTipRad,
-        clockSource,
         effs,
         tilt,
       })
@@ -255,37 +218,7 @@ export default function LogicStageDom() {
         let s = (it.cfg.scale?.pct ?? 100) / 100
         let alphaMul = 1
 
-        if (it.clockEnabled && it.clockOverrideOrbit && it.radius > 0) {
-          // time-driven orbit angle
-          const now = Date.now()
-          const useUTC = it.clockSource.mode === 'utc' || it.clockSource.tzOffsetMinutes != null
-          const shift = (it.clockSource.tzOffsetMinutes ?? 0) * 60000
-          const d = new Date(useUTC ? now + shift : now)
-          const H = useUTC ? d.getUTCHours() : d.getHours()
-          const M = useUTC ? d.getUTCMinutes() : d.getMinutes()
-          const S = useUTC ? d.getUTCSeconds() : d.getSeconds()
-          const ms = useUTC ? d.getUTCMilliseconds() : d.getMilliseconds()
-          let tRad = 0
-          if (it.clockHandOrbit === 'second') {
-            const sVal = it.clockSmooth ? S + ms/1000 : S
-            tRad = (2*Math.PI) * (sVal/60)
-          } else if (it.clockHandOrbit === 'minute') {
-            const mVal = it.clockSmooth ? M + S/60 : M
-            tRad = (2*Math.PI) * (mVal/60)
-          } else {
-            const hVal = it.clockFormat === 24
-              ? (H + (it.clockSmooth ? M/60 + S/3600 : 0)) / 24
-              : (((H % 12) + (it.clockSmooth ? M/60 + S/3600 : 0)) / 12)
-            tRad = (2*Math.PI) * hVal
-          }
-          const cx = ww * (clamp01(it.centerPct.x / 100))
-          const cy = hh * (clamp01(it.centerPct.y / 100))
-          x = cx + (it.radius) * Math.cos(tRad)
-          y = cy + (it.radius) * Math.sin(tRad)
-          if (it.orientPolicy === 'override' || (it.orientPolicy === 'auto' && it.spinRadPerSec <= 0)) {
-            angle = tRad + it.orientDegRad
-          }
-        } else if (it.orbitRadPerSec > 0 && it.radius > 0) {
+        if (it.orbitRadPerSec > 0 && it.radius > 0) {
           const cx = ww * (clamp01(it.centerPct.x / 100))
           const cy = hh * (clamp01(it.centerPct.y / 100))
           const tAngle = it.basePhase + it.orbitDir * it.orbitRadPerSec * elapsed
@@ -296,41 +229,13 @@ export default function LogicStageDom() {
           }
         }
 
-        // Clock rotation override (phase 1)
-        if (it.clockEnabled && it.clockOverrideSpin) {
-          // Compute time-based angle
-          const now = Date.now()
-          const useUTC = it.clockSource.mode === 'utc' || it.clockSource.tzOffsetMinutes != null
-          const shift = (it.clockSource.tzOffsetMinutes ?? 0) * 60000
-          const d = new Date(useUTC ? now + shift : now)
-          const H = useUTC ? d.getUTCHours() : d.getHours()
-          const M = useUTC ? d.getUTCMinutes() : d.getMinutes()
-          const S = useUTC ? d.getUTCSeconds() : d.getSeconds()
-          const ms = useUTC ? d.getUTCMilliseconds() : d.getMilliseconds()
-          let tRad = 0
-          if (it.clockHandSpin === 'second') {
-            const sVal = it.clockSmooth ? S + ms/1000 : S
-            tRad = (2*Math.PI) * (sVal/60)
-          } else if (it.clockHandSpin === 'minute') {
-            const mVal = it.clockSmooth ? M + S/60 : M
-            tRad = (2*Math.PI) * (mVal/60)
-          } else {
-            const hVal = it.clockFormat === 24
-              ? (H + (it.clockSmooth ? M/60 + S/3600 : 0)) / 24
-              : (((H % 12) + (it.clockSmooth ? M/60 + S/3600 : 0)) / 12)
-            tRad = (2*Math.PI) * hVal
-          }
-          angle = it.baseRad + it.clockTipRad + tRad
-        } else {
-          // Spin (only if orientation didn't already override)
-          if (!(it.orientPolicy === 'override' || (it.orientPolicy === 'auto' && it.spinRadPerSec <= 0))) {
+                  if (!(it.orientPolicy === 'override' || (it.orientPolicy === 'auto' && it.spinRadPerSec <= 0))) {
             if (it.spinRadPerSec > 0) {
               angle = it.baseRad + it.spinDir * it.spinRadPerSec * elapsed
             }
           }
-        }
 
-        // Tilt (applied after spin/orbit/clock)
+        // Tilt (applied after spin/orbit)
         if (it.tilt) {
           const axisCount = it.tilt.axis === 'both' ? 2 : 1
           let tiltRad = 0
@@ -350,7 +255,6 @@ export default function LogicStageDom() {
           angle += tiltRad
         }
 
-        it.el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${(angle * 180) / Math.PI}deg) scale(${s})`
         // Effects (phase 1)
         if (it.effs && it.effs.length) {
           let scaleMul = 1
@@ -377,6 +281,7 @@ export default function LogicStageDom() {
           s *= scaleMul
           alphaMul = Math.max(0, Math.min(1, alpha))
         }
+
         it.el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${(angle * 180) / Math.PI}deg) scale(${s})`
         it.el.style.opacity = String(alphaMul)
       }

@@ -5,7 +5,6 @@ import { logicApplyBasicTransform, logicZIndexFor } from './LogicLoaderBasic'
 import { buildSpin, tickSpin } from './LogicLoaderSpin'
 // clampRpm60 no longer used here (handled in Orbit/Spin modules)
 import { buildOrbit } from './LogicLoaderOrbit'
-import { buildClock } from './LogicLoaderClock'
 import { buildEffects } from './LogicLoaderEffects'
 import { buildEffectsAdvanced } from './LogicLoaderEffectsAdvanced'
 
@@ -96,8 +95,6 @@ export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): P
   const { items: spinItems, rpmBySprite: spinRpmBySprite } = buildSpin(app, built)
   // Orbit runtime: build items and helpers
   const orbit = buildOrbit(app, built, spinRpmBySprite)
-  // Clock runtime (Phase 1: rotation override only)
-  const clock = buildClock(app, built)
   // Effects (Phase 1: property effects only)
   const effects = buildEffects(app, built)
   const adv = buildEffectsAdvanced(app, built)
@@ -106,34 +103,31 @@ export async function buildSceneFromLogic(app: Application, cfg: LogicConfig): P
   const onResize = () => {
     for (const b of built) logicApplyBasicTransform(app, b.sprite, b.cfg)
     orbit.recompute(elapsed)
-    clock.recompute()
   }
   const resizeListener = () => onResize()
   window.addEventListener('resize', resizeListener)
 
   const tick = () => {
-    if (spinItems.length === 0 && orbit.items.length === 0 && clock.items.length === 0 && effects.items.length === 0 && adv.items.length === 0) return
+    if (spinItems.length === 0 && orbit.items.length === 0 && effects.items.length === 0 && adv.items.length === 0) return
     const dt = (app.ticker.deltaMS || 16.667) / 1000
     elapsed += dt
     // Spin
     tickSpin(spinItems, elapsed)
     // Orbit
     orbit.tick(elapsed)
-    // Clock (applies overrides when enabled)
-    clock.tick()
     // Effects
     effects.tick(elapsed, built)
     // Advanced Effects (gated)
     adv.tick(elapsed, built)
   }
-  if (spinItems.length > 0 || orbit.items.length > 0 || clock.items.length > 0 || effects.items.length > 0 || adv.items.length > 0) {
+  if (spinItems.length > 0 || orbit.items.length > 0 || effects.items.length > 0 || adv.items.length > 0) {
     app.ticker.add(tick)
   }
 
   const prevCleanup = (container as any)._cleanup as (() => void) | undefined
   ;(container as any)._cleanup = () => {
     try { window.removeEventListener('resize', resizeListener) } catch {}
-    try { if (spinItems.length > 0 || orbit.items.length > 0 || clock.items.length > 0 || effects.items.length > 0 || adv.items.length > 0) app.ticker.remove(tick) } catch {}
+    try { if (spinItems.length > 0 || orbit.items.length > 0 || effects.items.length > 0 || adv.items.length > 0) app.ticker.remove(tick) } catch {}
     try { (effects as any).cleanup?.() } catch {}
     try { adv.cleanup() } catch {}
     try { prevCleanup?.() } catch {}

@@ -4,40 +4,6 @@ export type ImageRef =
   | { kind: 'urlId'; id: string }
   | { kind: 'url'; url: string }
 
-export type ClockHand = 'second' | 'minute' | 'hour'
-export type ClockHandSelection = ClockHand | 'none'
-
-export type ClockCenterConfig = {
-  xPct?: number | null
-  yPct?: number | null
-}
-
-export type ClockAngleConfig = {
-  angleDeg?: number | null
-}
-
-export type ClockRadiusConfig = {
-  pct?: number | null // percentage of distance from center to edge (0..100)
-  value?: number | null // absolute pixels (post-scale)
-}
-
-export type ClockConfig = {
-  enabled: boolean
-  center?: ClockCenterConfig | null
-  base?: ClockAngleConfig | null
-  tip?: ClockAngleConfig | null
-  timezone?: 'device' | 'utc' | 'server'
-  spinHand?: ClockHandSelection
-  spinRadius?: ClockRadiusConfig | null
-  orbitHand?: ClockHandSelection
-  orbitCenter?: ClockCenterConfig | null
-  smooth?: boolean | null
-  format?: 12 | 24
-  source?: {
-    tzOffsetMinutes?: number | null
-  }
-}
-
 export type LayerConfig = {
   id: string
   imageRef: ImageRef
@@ -55,8 +21,6 @@ export type LayerConfig = {
   // Orbit orientation (optional, simplified)
   orbitOrientPolicy?: 'none' | 'auto' | 'override'
   orbitOrientDeg?: number | null
-  // Clock (optional)
-  clock?: ClockConfig
   // Visual effects (optional; Phase 1 supports fade/pulse only)
   effects?: Array<
     | {
