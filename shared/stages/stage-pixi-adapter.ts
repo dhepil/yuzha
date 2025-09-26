@@ -7,7 +7,7 @@ import type {
  */
 
 import { Application } from 'pixi.js'
-import { StageTransformManager, STAGE_WIDTH, STAGE_HEIGHT } from './stage-transform.js'
+import { StageTransformManager, STAGE_WIDTH, STAGE_HEIGHT } from './stage-transform'
 
 export interface PixiStageAdapterOptions {
   /** Enable debug overlay */

@@ -1,5 +1,5 @@
 import type { Sprite } from 'pixi.js'
-import { STAGE_WIDTH, STAGE_HEIGHT } from '@shared/pixi/stage-transform'
+import { STAGE_WIDTH, STAGE_HEIGHT } from '@shared/stages/stage-transform'
 
 export type OrbitLayerInput = {
   sprite: Sprite

@@ -10,9 +10,11 @@ import type {
  * between screen space and stage world coordinates.
  */
 
+import { STAGE_WIDTH as BASE_STAGE_WIDTH, STAGE_HEIGHT as BASE_STAGE_HEIGHT } from '@shared/pixi/PixiConstant'
+
 // Design canvas dimensions (fixed)
-export const STAGE_WIDTH = 2048
-export const STAGE_HEIGHT = 2048
+export const STAGE_WIDTH = BASE_STAGE_WIDTH
+export const STAGE_HEIGHT = BASE_STAGE_HEIGHT
 
 // Display scale factor to make 2048×2048 display like 1024×1024
 export const DISPLAY_SCALE_FACTOR = 0.5
@@ -257,4 +259,6 @@ export function createCoordinateTransformer(manager: StageTransformManager) {
     }
   }
 }
+
+
 

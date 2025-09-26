@@ -29,6 +29,8 @@ export async function mountStage<Cfg, Result extends { container: Container }>(
     app.stage.addChild(sceneContainer);
   } catch (e) {
     console.error('[Stage] Failed to mount scene', e);
+    stageAdapter.dispose();
+    throw e;
   }
 
   return {
@@ -45,3 +47,5 @@ export async function mountStage<Cfg, Result extends { container: Container }>(
     }
   };
 }
+
+
