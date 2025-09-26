@@ -4,13 +4,15 @@
     "baseUrl": ".",
     "types": ["vite/client"],
     "paths": {
-      "@shared/*": ["../../shared/*"]
+      "@shared/*": ["../../shared/*"],
+      "@src/*": ["../../src/*"]
     }
   },
   "include": [
     "src",
     "env.d.ts",
     "index.html",
-    "../../shared"
+    "../../shared",
+    "../../src"
   ]
 }

@@ -1,54 +1,92 @@
-import React from 'react'
-import { PixiStageAdapter } from '../utils/stage-pixi-adapter'
-import { buildSceneFromLogic } from './logicLoader'
-import type { LogicConfig } from './sceneTypes'
-import logicConfigJson from './LogicConfig'
+import React from 'react';
+import { PixiCore, PixiCoreConfiguration } from '@shared/pixi';
+import { buildSceneFromLogic } from './logicLoader';
+import type { LogicConfig } from './sceneTypes';
+import type { BuildResult } from './logicLoader';
+import logicConfigJson from './LogicConfig';
 
 export default function LogicStage() {
-  const ref = React.useRef<HTMLDivElement | null>(null)
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
+  const sceneCleanupRef = React.useRef<(() => void) | null>(null);
+  const pixiCoreRef = React.useRef<PixiCore | null>(null);
 
   React.useEffect(() => {
-    let adapter: PixiStageAdapter | null = null
-    let cleanupScene: (() => void) | undefined
+    let mounted = true;
 
-    ;(async () => {
-      const el = ref.current
-      if (!el) return
+    (async () => {
+      const el = ref.current;
+      if (!el) return;
 
       try {
-        // Create stage adapter with fixed 2048×2048 dimensions
-        adapter = new PixiStageAdapter({
+        // Create PixiCore instance with configuration
+        const config = new PixiCoreConfiguration({
+          width: 2048,
+          height: 2048,
           backgroundAlpha: 0,
           antialias: true,
-          debug: false // Set to true for development debugging
-        })
+          autoDensity: true,
+          resolution: window.devicePixelRatio || 1
+        });
 
-        // Mount the Pixi stage
-        const { app } = await adapter.mount(el)
+        const core = PixiCore.getInstance(config);
+        pixiCoreRef.current = core;
+
+        if (!mounted) return;
+        core.mount(el);
 
         // Build and add the scene
-        const cfg = logicConfigJson as unknown as LogicConfig
-        const scene = await buildSceneFromLogic(app, cfg)
-        app.stage.addChild(scene.container)
-
-        cleanupScene = () => {
-          try { (scene.container as any)._cleanup?.() } catch {}
-          try { scene.container.destroy({ children: true }) } catch {}
+        const cfg = logicConfigJson as LogicConfig;
+        const pixiInstance = core.getPixiInstance();
+        const scene = await buildSceneFromLogic(pixiInstance.app, cfg);
+        
+        if (!mounted) {
+          scene.container.destroy({ children: true });
+          return;
         }
-      } catch (e) {
-        console.error('[LogicStage] Failed to build scene from logic config', e)
-      }
-    })()
 
-   return () => {
-      try { cleanupScene?.() } catch {}
-      try { adapter?.dispose() } catch {}
-    }
-  }, [])
+        core.addToStage(scene.container);
+
+        // Store cleanup function
+        sceneCleanupRef.current = () => {
+          try {
+            const container = scene.container as any;
+            if (typeof container._cleanup === 'function') {
+              container._cleanup();
+            }
+            scene.container.destroy({ children: true });
+          } catch (err) {
+            console.warn('[LogicStage] Cleanup error:', err);
+          }
+        };
+      } catch (e) {
+        if (!mounted) return;
+        const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+        console.error('[LogicStage] Failed to build scene:', e);
+        setError(`Failed to initialize stage: ${errorMessage}`);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+      try { sceneCleanupRef.current?.() } catch {}
+      try { pixiCoreRef.current?.destroy() } catch {}
+      sceneCleanupRef.current = null;
+      pixiCoreRef.current = null;
+    };
+  }, []);
+
+  if (error) {
+    return (
+      <div className="w-full h-full flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
-    <div ref={ref} />
-  )
+    <div ref={ref} className="w-full h-full" />
+  );
 }
 
 

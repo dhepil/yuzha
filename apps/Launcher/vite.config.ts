@@ -13,7 +13,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@shared': path.resolve(monorepoRoot, 'shared')
+      '@shared': path.resolve(monorepoRoot, 'shared'),
+      '@src': path.resolve(monorepoRoot, 'src')
     },
     // Avoid multiple Pixi instances when HMR/monorepo linking
     dedupe: ['pixi.js']
