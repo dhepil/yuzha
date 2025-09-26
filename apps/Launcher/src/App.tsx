@@ -1,10 +1,10 @@
 import React from 'react'
-import LauncherScreen from './logic/LauncherScreen'
+import MainScreen from './MainScreen'
 
 export default function App() {
   return (
     <div className="app-shell">
-      <LauncherScreen />
+      <MainScreen />
     </div>
   )
 }

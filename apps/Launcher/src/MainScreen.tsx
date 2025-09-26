@@ -1,16 +1,16 @@
 import React from 'react'
-import { LauncherBtnPanel } from '../ui/LauncherBtn'
-import { useLauncherBtnGesture } from '../ui/LauncherBtnGesture'
-import LogicRendererBadge from '../utils/LogicRendererBadge'
-import LogicUpdater from '../utils/LogicUpdater'
-import LogicApiTester from '../utils/LogicApiTester'
-import LogicStage from './LogicStage'
+import { LauncherBtnPanel } from './ui/LauncherBtn'
+import { useLauncherBtnGesture } from './ui/LauncherBtnGesture'
+import LogicRendererBadge from './utils/LogicRendererBadge'
+import LogicUpdater from './utils/LogicUpdater'
+import LogicApiTester from './utils/LogicApiTester'
+import LogicStage from './logic/LogicStage'
 
 /**
  * Layar utama launcher yang menampilkan navigasi dock.
  * Logic renderer kompleks dihapus untuk sementara.
  */
-export default function LauncherScreen() {
+export default function MainScreen() {
   const gesture = useLauncherBtnGesture()
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
@@ -45,3 +45,4 @@ export default function LauncherScreen() {
     </div>
   )
 }
+
