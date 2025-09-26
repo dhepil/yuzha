@@ -1,9 +1,38 @@
 import { Assets, Container, Sprite } from 'pixi.js'
 import type { Application } from 'pixi.js'
 import type { BuiltLayer, BuildResult, LogicConfig, LayerConfig } from '../logic/LogicTypes'
-import { logicApplyBasicTransform, logicZIndexFor, sortLayersForRender } from './LayerPlacement'
+import { STAGE_WIDTH, STAGE_HEIGHT } from '@shared/pixi/stage-transform'
 import { buildLayerOrbit } from './LayerOrbit'
 import { buildLayerSpin, tickLayerSpin } from './LayerSpin'
+
+// Derive z-index from layer id pattern
+function logicZIndexFor(cfg: LayerConfig): number {
+  const match = cfg.id.match(/\d+/)
+  return match ? parseInt(match[0], 10) : 0
+}
+
+// Sort layer configs deterministically by z-index then id
+function sortLayersForRender(layers: LayerConfig[]): LayerConfig[] {
+  return [...layers].sort((a, b) => {
+    const za = logicZIndexFor(a)
+    const zb = logicZIndexFor(b)
+    if (za !== zb) return za - zb
+    return a.id.localeCompare(b.id)
+  })
+}
+
+// Project layer config onto stage space and set sprite transform
+function logicApplyBasicTransform(app: Application, sprite: Sprite, cfg: LayerConfig) {
+  const width = STAGE_WIDTH
+  const height = STAGE_HEIGHT
+  const xPct = cfg.position.xPct ?? 0
+  const yPct = cfg.position.yPct ?? 0
+  sprite.x = (xPct / 100) * width
+  sprite.y = (yPct / 100) * height
+  const scale = (cfg.scale?.pct ?? 100) / 100
+  sprite.scale.set(scale, scale)
+  sprite.zIndex = logicZIndexFor(cfg)
+}
 
 export function resolveLayerImageUrl(cfg: LogicConfig, layer: LayerConfig): string | null {
   const ref = layer.imageRef
@@ -28,7 +57,6 @@ export async function createLayerSprite(
     const sprite = new Sprite(texture)
     sprite.anchor.set(0.5)
     logicApplyBasicTransform(app, sprite, layer)
-    sprite.zIndex = logicZIndexFor(layer)
     return { id: layer.id, sprite, cfg: layer }
   } catch (e) {
     console.error('[logic] Failed to load', url, 'for layer', layer.id, e)
@@ -86,6 +114,7 @@ export async function createLogicScene(app: Application, cfg: LogicConfig): Prom
       spinRPM: spinRpmBySprite.get(b.sprite) ?? 0
     }))
   )
+
   let elapsed = 0
 
   const onResize = () => {
@@ -117,5 +146,3 @@ export async function createLogicScene(app: Application, cfg: LogicConfig): Prom
 
   return { container, layers: built }
 }
-
-
